@@ -1,11 +1,11 @@
 """OGER Implementation."""
 from dataclasses import dataclass
 
-from oaklib.interfaces import BasicOntologyInterface
+from oaklib.interfaces import TextAnnotatorInterface
 
 
 @dataclass
-class OGERImplementation(BasicOntologyInterface):
+class OGERImplementation(TextAnnotatorInterface):
     """OGER Implementation."""
 
     def __post_init__(self):
