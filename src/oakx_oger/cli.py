@@ -1,6 +1,7 @@
 """Command line interface for oakx-oger."""
-import click
 import logging
+
+import click
 
 from oakx_oger import __version__
 from oakx_oger.oger_implementation import OGERImplementation
@@ -10,6 +11,7 @@ __all__ = [
 ]
 
 logger = logging.getLogger(__name__)
+
 
 @click.group()
 @click.option("-v", "--verbose", count=True)
@@ -30,11 +32,12 @@ def main(verbose: int, quiet: bool):
     if quiet:
         logger.setLevel(level=logging.ERROR)
 
+
 @main.command()
 def run():
     """Run the oakx-oger's demo command."""
     impl = OGERImplementation()
-     
+    print(impl)
 
 
 if __name__ == "__main__":

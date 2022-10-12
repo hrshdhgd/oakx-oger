@@ -1,12 +1,13 @@
-import logging
-from abc import ABC
+"""OGER Implementation."""
 from dataclasses import dataclass
+
 from oaklib.interfaces import BasicOntologyInterface
-from typing import Any, Iterable, Optional
+
 
 @dataclass
 class OGERImplementation(BasicOntologyInterface):
+    """OGER Implementation."""
 
     def __post_init__(self):
+        """Initialize the OGERImplementation class."""
         pass
-
