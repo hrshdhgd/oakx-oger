@@ -122,6 +122,14 @@ tests = ["coverage", "pytest", "more-itertools"]
 web = ["pyyaml", "rdflib", "rdflib-jsonld", "flask", "flasgger", "bootstrap-flask (<=2.0.0)", "markdown"]
 
 [[package]]
+name = "bottle"
+version = "0.12.23"
+description = "Fast and simple WSGI-framework for small web-applications."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "certifi"
 version = "2022.9.24"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -453,6 +461,14 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "joblib"
+version = "1.2.0"
+description = "Lightweight pipelining with Python functions"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "json-flattener"
 version = "0.1.9"
 description = "Python library for denormalizing nested dicts or json objects to tables and back"
@@ -649,6 +665,20 @@ rdflib = ">=6.0.0"
 requests = "*"
 
 [[package]]
+name = "lxml"
+version = "4.9.1"
+description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, != 3.4.*"
+
+[package.extras]
+cssselect = ["cssselect (>=0.7)"]
+html5 = ["html5lib"]
+htmlsoup = ["beautifulsoup4"]
+source = ["Cython (>=0.29.7)"]
+
+[[package]]
 name = "markdown-it-py"
 version = "2.1.0"
 description = "Python port of markdown-it. Markdown parsing, done right!"
@@ -759,6 +789,28 @@ extra = ["lxml (>=4.6)", "pygraphviz (>=1.9)", "pydot (>=1.4.2)", "sympy (>=1.10
 test = ["pytest (>=7.1)", "pytest-cov (>=3.0)", "codecov (>=2.1)"]
 
 [[package]]
+name = "nltk"
+version = "3.7"
+description = "Natural Language Toolkit"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+click = "*"
+joblib = "*"
+regex = ">=2021.8.3"
+tqdm = "*"
+
+[package.extras]
+all = ["numpy", "pyparsing", "scipy", "matplotlib", "twython", "requests", "scikit-learn", "python-crfsuite"]
+corenlp = ["requests"]
+machine_learning = ["numpy", "python-crfsuite", "scikit-learn", "scipy"]
+plot = ["matplotlib"]
+tgrep = ["pyparsing"]
+twitter = ["twython"]
+
+[[package]]
 name = "numpy"
 version = "1.23.3"
 description = "NumPy is the fundamental package for array computing with Python."
@@ -817,6 +869,19 @@ sssom-schema = ">=0.9.3,<0.10.0"
 
 [package.extras]
 gilda = ["gilda (>=0.10.1,<0.11.0)"]
+
+[[package]]
+name = "oger"
+version = "1.5"
+description = "OntoGene's Biomedical Entity Recogniser"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+bottle = "*"
+lxml = "*"
+nltk = "*"
 
 [[package]]
 name = "ols-client"
@@ -1213,6 +1278,14 @@ python-versions = ">=3.7"
 [package.dependencies]
 rdflib = ">=5.0.0"
 rdflib-jsonld = "0.6.1"
+
+[[package]]
+name = "regex"
+version = "2022.9.13"
+description = "Alternative regular expression module, to replace re."
+category = "main"
+optional = false
+python-versions = ">=3.6"
 
 [[package]]
 name = "requests"
@@ -1752,7 +1825,7 @@ docs = []
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "a814d96b882100cb1eb28d21d25ba3062ca4599c0b3ac6f9f6b71d7045999ce7"
+content-hash = "0f9161ba7ea829468c440e6669461cbe9d0dc30f8d296502c78715774358ecbf"
 
 [metadata.files]
 aiohttp = []
@@ -1765,6 +1838,7 @@ attrs = []
 babel = []
 bcp47 = []
 bioregistry = []
+bottle = []
 certifi = []
 cfgraph = []
 chardet = []
@@ -1794,6 +1868,7 @@ importlib-metadata = []
 iniconfig = []
 isodate = []
 jinja2 = []
+joblib = []
 json-flattener = []
 jsonasobj = []
 jsonasobj2 = []
@@ -1807,6 +1882,7 @@ lark = []
 linkml = []
 linkml-dataops = []
 linkml-runtime = []
+lxml = []
 markdown-it-py = []
 markupsafe = []
 mdit-py-plugins = []
@@ -1815,9 +1891,11 @@ more-click = []
 multidict = []
 myst-parser = []
 networkx = []
+nltk = []
 numpy = []
 nxontology = []
 oaklib = []
+oger = []
 ols-client = []
 ontoportal-client = []
 openpyxl = []
@@ -1849,6 +1927,7 @@ ratelimit = []
 rdflib = []
 rdflib-jsonld = []
 rdflib-shim = []
+regex = []
 requests = []
 rfc3987 = []
 "ruamel.yaml" = []
