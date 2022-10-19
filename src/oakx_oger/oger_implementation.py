@@ -1,9 +1,9 @@
 """OGER Implementation."""
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Iterable, Iterator
 
-import pandas as pd
 from oaklib.datamodels.text_annotator import (
     TextAnnotation,
     TextAnnotationConfiguration,
@@ -11,11 +11,32 @@ from oaklib.datamodels.text_annotator import (
 from oaklib.interfaces import TextAnnotatorInterface
 from oaklib.interfaces.obograph_interface import OboGraphInterface
 from oaklib.selector import get_implementation_from_shorthand
-from oaklib.utilities.rate_limiter import check_limit
-from pathlib import Path
 from oaklib.types import CURIE
+from oaklib.utilities.rate_limiter import check_limit
+
+# from oger.ctrl.run import run
 # from oger.er.entity_recognition import EntityRecognizer
+
 TERMS_DIR = Path(__file__).resolve().parent / "terms"
+OGER_CONFIG = {
+    "include_header": "True",
+    "input-directory": "data/input",
+    "output-directory": "data/output",
+    "pointer-type": "glob",
+    "pointers": "*.tsv",
+    "iter-mode": "collection",
+    "article-format": "txt_tsv",
+    "export_format": "tsv",
+    "termlist1_path": "data/terms/mop_termlist.tsv",
+    "termlist_stopwords": "data/stopwords/stopWords.txt",
+    "termlist_normalize": "stem-Porter",
+    "postfilter": "builtin:remove_overlaps \
+        builtin:remove_sametype_overlaps \
+        builtin:remove_submatches  \
+        builtin:remove_sametype_submatches",
+    "n_workers": 1,
+}
+
 
 @dataclass
 class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
@@ -33,27 +54,39 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         # edges_columns = ["subject_id", "predicate_id", "object_id"]
         # edges_table = pd.DataFrame(columns=edges_columns)
         # for rel in oi.all_relationships():
-        #     edges_table = pd.concat([edges_table,pd.DataFrame([rel], columns=edges_columns)], ignore_index=True)
+        #     edges_table = pd.concat([edges_table,pd.DataFrame([rel], \
+        # columns=edges_columns)], ignore_index=True)
         ont = slug.split(":")[-1]
-        termlist_fn = ont+"_termlist.tsv"
+        termlist_fn = ont + "_termlist.tsv"
         termlist_filepath = TERMS_DIR / termlist_fn
         if termlist_filepath.is_file():
-            # termlist_df = pd.read_csv(termlist_file, sep='\t',low_memory=False)
-            logging.info(
-                    f"Termlist exists at {termlist_filepath}"
-                )
+            logging.info(f"Termlist exists at {termlist_filepath}")
         else:
             self._create_termlist(slug, termlist_filepath)
-        
-                
-    def _create_termlist(self, slug:str, path:Path) -> None:
-        """Create an ontology termlist file which forms the ER dictionary. """
-        with open(path, 'w') as t:
+
+        # self.er = EntityRecognizer()
+
+    def _create_termlist(self, slug: str, path: Path) -> None:
+        """Create an ontology termlist file which forms the ER dictionary."""
+        with open(path, "w") as t:
             for node in self.oi.entities():
                 if self.oi.label(node):
-                    t.write("\t".join(["CUI-less", slug, node, self.oi.label(node), self.oi.label(node)])+"\n")
+                    t.write(
+                        "\t".join(
+                            [
+                                "CUI-less",
+                                slug,
+                                node,
+                                self.oi.label(node),
+                                self.oi.label(node),
+                            ]
+                        )
+                        + "\n"
+                    )
 
-    def entities(self, filter_obsoletes=True, owl_type=None) -> Iterable[CURIE]:
+    def entities(
+        self, filter_obsoletes=True, owl_type=None
+    ) -> Iterable[CURIE]:
         """Implement OAK interface."""
         for n_id in self.oi.entities():
             yield n_id
