@@ -96,7 +96,7 @@ python-versions = "*"
 
 [[package]]
 name = "bioregistry"
-version = "0.5.125"
+version = "0.5.134"
 description = "Integrated registry of biological databases and nomenclatures"
 category = "main"
 optional = false
@@ -112,11 +112,11 @@ requests = "*"
 tqdm = "*"
 
 [package.extras]
-gha = ["more-itertools"]
 align = ["pyyaml", "beautifulsoup4", "tabulate", "defusedxml", "class-resolver"]
 charts = ["matplotlib", "matplotlib-venn", "seaborn", "pandas"]
 docs = ["sphinx", "sphinx-rtd-theme", "sphinx-click", "sphinx-autodoc-typehints", "sphinx-automodapi", "autodoc-pydantic"]
 export = ["pyyaml", "rdflib", "rdflib-jsonld", "ndex2"]
+gha = ["more-itertools"]
 health = ["click-default-group", "pandas", "tabulate", "pyyaml"]
 tests = ["coverage", "pytest", "more-itertools"]
 web = ["pyyaml", "rdflib", "rdflib-jsonld", "flask", "flasgger", "bootstrap-flask (<=2.0.0)", "markdown"]
@@ -307,7 +307,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "fsspec"
-version = "2022.8.2"
+version = "2022.10.0"
 description = "File-system specification"
 category = "main"
 optional = false
@@ -431,7 +431,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "flake8 
 name = "iniconfig"
 version = "1.1.1"
 description = "iniconfig: brain-dead simple config-ini parsing"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -591,7 +591,7 @@ atomic_cache = ["atomicwrites"]
 
 [[package]]
 name = "linkml"
-version = "1.3.7"
+version = "1.3.8"
 description = "Linked Open Data Modeling Language"
 category = "main"
 optional = false
@@ -646,7 +646,7 @@ linkml-runtime = ">=1.1.6"
 
 [[package]]
 name = "linkml-runtime"
-version = "1.3.2"
+version = "1.3.4"
 description = "Runtime environment for LinkML, the Linked open data modeling language"
 category = "main"
 optional = false
@@ -659,7 +659,7 @@ hbreader = "*"
 json-flattener = ">=0.1.9"
 jsonasobj2 = ">=1.0.4,<2.0.0"
 jsonschema = ">=3.2.0"
-prefixcommons = "0.1.11"
+prefixcommons = ">=0.1.12"
 pyyaml = "*"
 rdflib = ">=6.0.0"
 requests = "*"
@@ -812,7 +812,7 @@ twitter = ["twython"]
 
 [[package]]
 name = "numpy"
-version = "1.23.3"
+version = "1.23.4"
 description = "NumPy is the fundamental package for array computing with Python."
 category = "main"
 optional = false
@@ -942,7 +942,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "pandas"
-version = "1.5.0"
+version = "1.5.1"
 description = "Powerful data structures for data analysis, time series, and statistics"
 category = "main"
 optional = false
@@ -1014,13 +1014,16 @@ python-versions = "*"
 
 [[package]]
 name = "prefixcommons"
-version = "0.1.11"
+version = "0.1.12"
 description = "A python API for working with ID prefixes"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
+click = ">=8.1.3,<9.0.0"
+pytest-logging = ">=2015.11.4,<2016.0.0"
+PyYAML = ">=6.0,<7.0"
 requests = ">=2.28.1,<3.0.0"
 
 [[package]]
@@ -1037,7 +1040,7 @@ PyYAML = ">=6.0,<7.0"
 
 [[package]]
 name = "pronto"
-version = "2.5.0"
+version = "2.5.1"
 description = "Python frontend to ontologies."
 category = "main"
 optional = false
@@ -1174,7 +1177,7 @@ xml = ["lxml"]
 name = "pytest"
 version = "7.1.3"
 description = "pytest: simple powerful testing with Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1189,6 +1192,17 @@ tomli = ">=1.0.0"
 
 [package.extras]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
+
+[[package]]
+name = "pytest-logging"
+version = "2015.11.4"
+description = "Configures logging and allows tweaking the log level with a py.test flag"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pytest = ">=2.8.1"
 
 [[package]]
 name = "python-dateutil"
@@ -1214,7 +1228,7 @@ sortedcontainers = "*"
 
 [[package]]
 name = "pytz"
-version = "2022.4"
+version = "2022.5"
 description = "World timezone definitions, modern and historical"
 category = "main"
 optional = false
@@ -1432,7 +1446,7 @@ dev = ["pandas-stubs (>=1.2.0.48)", "pandas (>=1.3.5)", "mypy (>=0.931)", "setup
 
 [[package]]
 name = "sphinx"
-version = "5.2.3"
+version = "5.3.0"
 description = "Python documentation generator"
 category = "main"
 optional = false
@@ -1579,7 +1593,7 @@ test = ["pytest"]
 
 [[package]]
 name = "sqlalchemy"
-version = "1.4.41"
+version = "1.4.42"
 description = "Database Abstraction Library"
 category = "main"
 optional = false
@@ -1825,7 +1839,7 @@ docs = []
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "0f9161ba7ea829468c440e6669461cbe9d0dc30f8d296502c78715774358ecbf"
+content-hash = "f220404ce20c484430b445cbcf063259183a6d85fa7e6a751066582853527d6f"
 
 [metadata.files]
 aiohttp = []
@@ -1919,6 +1933,7 @@ pyshex = []
 pyshexc = []
 pystow = []
 pytest = []
+pytest-logging = []
 python-dateutil = []
 pytrie = []
 pytz = []
