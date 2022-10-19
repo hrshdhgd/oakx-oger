@@ -18,5 +18,3 @@ class TestOGERImplementation(unittest.TestCase):
         curies = list(self.oi.entities())
         self.assertIn(SHAPE, curies)
         self.assertIn(MORPHOLOGY, curies)
-
-    
