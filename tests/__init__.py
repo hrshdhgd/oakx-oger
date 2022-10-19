@@ -13,6 +13,9 @@ NUCLEUS = "GO:0005634"
 NUCLEAR_ENVELOPE = "GO:0005635"
 THYLAKOID = "GO:0009579"
 
+SHAPE = "PATO:0000052"
+MORPHOLOGY = "PATO:0000051"
+
 
 def output_path(fn: str) -> str:
     """Return the path to the output file."""
