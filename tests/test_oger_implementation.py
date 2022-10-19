@@ -1,22 +1,22 @@
-"""Test OGERImplementation."""
+"""OGERImplementation test."""
 import unittest
 
-from oaklib.implementations import get_implementation_resolver
-from oaklib.selector import get_resource_from_shorthand
+from oaklib.selector import get_implementation_from_shorthand
 
-from oakx_oger.oger_implementation import OGERImplementation
-from tests import TEST_OWL
+from tests import MORPHOLOGY, SHAPE
 
 
 class TestOGERImplementation(unittest.TestCase):
-    """Test OGERImplementation."""
+    """OGERImplementation test."""
 
-    def test_plugin(self):
-        """Tests plugins are discovered."""
-        implementation_resolver = get_implementation_resolver()
-        resolved = implementation_resolver.lookup("OGER")
-        self.assertEqual(resolved, OGERImplementation)
+    def setUp(self) -> None:
+        """Set up implementation."""
+        self.oi = get_implementation_from_shorthand("oger:sqlite:obo:pato")
 
-        slug = f"oger:{TEST_OWL}"
-        r = get_resource_from_shorthand(slug)
-        self.assertEqual(r.implementation_class, OGERImplementation)
+    def test_entities(self):
+        """Test basic functionality."""
+        curies = list(self.oi.entities())
+        self.assertIn(SHAPE, curies)
+        self.assertIn(MORPHOLOGY, curies)
+
+    
