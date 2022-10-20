@@ -23,7 +23,7 @@ sphinx-autodoc-typehints = "^1.19.2"
 sphinx-click = "^4.3.0"
 
 [tool.poetry.scripts]
-oakger = "oakx_oger.cli:main"
+oaker = "oakx_oger.cli:main"
 
 [tool.poetry.plugins."oaklib.plugins"]
 oger = "oakx_oger.oger_implementation:OGERImplementation"
