@@ -15,6 +15,7 @@ THYLAKOID = "GO:0009579"
 
 SHAPE = "PATO:0000052"
 MORPHOLOGY = "PATO:0000051"
+ORGANISMS = "UBERON:0000062"
 
 
 def output_path(fn: str) -> str:

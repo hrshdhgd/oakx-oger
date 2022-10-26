@@ -1,8 +1,10 @@
 """OGER Implementation."""
+import csv
 import logging
 from dataclasses import dataclass
+from io import TextIOWrapper
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable
 
 from oaklib.datamodels.text_annotator import (
     TextAnnotation,
@@ -11,30 +13,33 @@ from oaklib.datamodels.text_annotator import (
 from oaklib.interfaces import TextAnnotatorInterface
 from oaklib.interfaces.obograph_interface import OboGraphInterface
 from oaklib.selector import get_implementation_from_shorthand
-from oaklib.types import CURIE
-from oaklib.utilities.rate_limiter import check_limit
+from oger.ctrl.run import run as og_run
 
-# from oger.ctrl.run import run
-# from oger.er.entity_recognition import EntityRecognizer
+__all__ = [
+    "OGERImplementation",
+]
 
 TERMS_DIR = Path(__file__).resolve().parent / "terms"
+INPUT_DIR = Path(__file__).resolve().parent / "input"
+OUT_DIR = Path(__file__).resolve().parent / "output"
+OUT_FILE = "None.tsv"
+BIOLINK_CLASS = "biolink:OntologyClass"
+
 OGER_CONFIG = {
     "include_header": "True",
-    "input-directory": "data/input",
-    "output-directory": "data/output",
+    "output-directory": str(OUT_DIR),
     "pointer-type": "glob",
-    "pointers": "*.tsv",
+    "pointers": "*.txt",
     "iter-mode": "collection",
-    "article-format": "txt_tsv",
+    "article-format": "txt",
     "export_format": "tsv",
-    "termlist1_path": "data/terms/mop_termlist.tsv",
-    "termlist_stopwords": "data/stopwords/stopWords.txt",
+    # "termlist1_path": "data/terms/pato_termlist.tsv",
+    # "termlist_stopwords": "data/stopwords/stopWords.txt",
     "termlist_normalize": "stem-Porter",
     "postfilter": "builtin:remove_overlaps \
         builtin:remove_sametype_overlaps \
         builtin:remove_submatches  \
         builtin:remove_sametype_submatches",
-    "n_workers": 1,
 }
 
 
@@ -42,20 +47,10 @@ OGER_CONFIG = {
 class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
     """OGER Implementation."""
 
-    # oger_client_class: ClassVar[type[EntityRecognizer]]
-
     def __post_init__(self):
         """Initialize the OGERImplementation class."""
         slug = self.resource.slug
         self.oi = get_implementation_from_shorthand(slug)
-
-        # node_columns = ["subject_id", "subject_label"]
-        # node_table = pd.DataFrame(columns=node_columns)
-        # edges_columns = ["subject_id", "predicate_id", "object_id"]
-        # edges_table = pd.DataFrame(columns=edges_columns)
-        # for rel in oi.all_relationships():
-        #     edges_table = pd.concat([edges_table,pd.DataFrame([rel], \
-        # columns=edges_columns)], ignore_index=True)
         ont = slug.split(":")[-1]
         termlist_fn = ont + "_termlist.tsv"
         termlist_filepath = TERMS_DIR / termlist_fn
@@ -63,11 +58,17 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
             logging.info(f"Termlist exists at {termlist_filepath}")
         else:
             self._create_termlist(slug, termlist_filepath)
-
-        # self.er = EntityRecognizer()
+        OGER_CONFIG["termlist_path"] = str(termlist_filepath)
 
     def _create_termlist(self, slug: str, path: Path) -> None:
-        """Create an ontology termlist file which forms the ER dictionary."""
+        """
+        Create an ontology termlist file which forms the ER dictionary.
+
+        Format produced by the Bio Term Hub (UMLS CUI first).
+
+        [0] UMLS CUI, [1] resource from which it comes,
+        [2] native ID, [3] term, [4] preferred form, [5] type
+        """
         with open(path, "w") as t:
             for node in self.oi.entities():
                 if self.oi.label(node):
@@ -79,55 +80,45 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                                 node,
                                 self.oi.label(node),
                                 self.oi.label(node),
+                                BIOLINK_CLASS,
                             ]
                         )
                         + "\n"
                     )
 
-    def entities(
-        self, filter_obsoletes=True, owl_type=None
-    ) -> Iterable[CURIE]:
-        """Implement OAK interface."""
-        for n_id in self.oi.entities():
-            yield n_id
-
-    def _get_response(self, *args, **kwargs):
-        check_limit()
-        # self.client.recognize_entities("cell")
-        # return self.client.get_response(*args, **kwargs)
-
-    def _get_json(self, *args, **kwargs):
-        # response = self._get_response(*args, **kwargs)
-        # return response.json()
-        pass
-
-    def annotate_text(
-        self, text: str, configuration: TextAnnotationConfiguration = None
-    ) -> Iterator[TextAnnotation]:
-        """Annotate text.
+    def annotate_file(
+        self, text_file: Path, configuration: TextAnnotationConfiguration
+    ) -> Iterable[TextAnnotation]:
+        """Annotate text from a file.
 
         :param text: Text to be annotated.
-        :param configuration: _description_, defaults to None
-        :return: _description_
-        :yield: _description_
+        :param configuration: TextAnnotationConfiguration , defaults to None
+        :yield: Annotated result
         """
-        # COPIED FROM ontoportal_implementation in oaklib
+        if isinstance(text_file, TextIOWrapper):
+            text_file = Path(text_file.name)
+        OGER_CONFIG["input-directory"] = str(text_file.resolve().parent)
+        og_run(n_workers=1, **OGER_CONFIG)
+        with open(OUT_DIR / OUT_FILE, "r") as f:
+            reader = csv.DictReader(f, delimiter="\t")
+            for row in reader:
+                yield TextAnnotation(
+                    subject_text_id=row["ENTITY ID"],
+                    subject_label=row["MATCHED TERM"],
+                    subject_start=row["START POSITION"],
+                    subject_end=row["END POSITION"],
+                )
 
-        # if configuration is None:
-        #     configuration = TextAnnotationConfiguration()
-        # logging.info(f"Annotating text: {text}")
-        # # include =['prefLabel', 'synonym', 'definition',\
-        #           'semanticType', 'cui']
-        # include = ["prefLabel", "semanticType", "cui"]
-        # require_exact_match = True
-        # include_str = ",".join(include)
-        # params = {
-        #           "include": include_str,
-        #           "require_exact_match": require_exact_match,
-        #           "text": text
-        #           }
-        # if self.resource and self.resource.slug:
-        #     params["ontologies"] = self.resource.slug.upper()
-        # results = self._get_json("/annotator", params=params)
-        # return self._annotator_json_to_results(results, text, configuration)
-        pass
+    def annotate_text(
+        self, text: str, configuration: TextAnnotationConfiguration
+    ) -> Iterable[TextAnnotation]:
+        """Annotate text from a file.
+
+        :param text: Text to be annotated.
+        :param configuration: TextAnnotationConfiguration , defaults to None
+        :yield: Annotated result
+        """
+        text_file: Path = INPUT_DIR / "input.txt"
+        text_file.parent.mkdir(exist_ok=True, parents=True)
+        text_file.write_text(text)
+        return self.annotate_file(text_file, configuration)
