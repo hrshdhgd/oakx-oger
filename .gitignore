@@ -128,3 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 src/oakx_oger/terms/*.tsv
+src/oakx_oger/terms/*.tsv.pickle
+tmp/*
+src/oakx_oger/input/*.txt
+src/oakx_oger/output/*.tsv
