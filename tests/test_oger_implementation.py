@@ -33,5 +33,5 @@ class TestOGERImplementation(unittest.TestCase):
         results = list(
             self.impl.annotate_text(self.input_words, self.configuration)
         )
-        self.assertEqual(len(results), 16)
+        self.assertEqual(len(results), 3)
         self.assertTrue(ORGANISMS in [x.subject_text_id for x in results])
