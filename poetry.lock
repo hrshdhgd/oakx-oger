@@ -95,8 +95,23 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "beautifulsoup4"
+version = "4.11.1"
+description = "Screen-scraping library"
+category = "main"
+optional = false
+python-versions = ">=3.6.0"
+
+[package.dependencies]
+soupsieve = ">1.2"
+
+[package.extras]
+html5lib = ["html5lib"]
+lxml = ["lxml"]
+
+[[package]]
 name = "bioregistry"
-version = "0.5.134"
+version = "0.5.142"
 description = "Integrated registry of biological databases and nomenclatures"
 category = "main"
 optional = false
@@ -198,15 +213,15 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
 name = "colorama"
-version = "0.4.5"
+version = "0.4.6"
 description = "Cross-platform colored terminal text."
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 
 [[package]]
 name = "curies"
-version = "0.1.5"
+version = "0.4.0"
 description = "Idiomatic conversion between URIs and compact URIs (CURIEs)."
 category = "main"
 optional = false
@@ -218,7 +233,9 @@ requests = "*"
 
 [package.extras]
 tests = ["coverage", "pytest"]
+pandas = ["pandas"]
 docs = ["sphinx-automodapi", "sphinx-autodoc-typehints", "sphinx-rtd-theme", "sphinx"]
+bioregistry = ["bioregistry (>=0.5.136)"]
 
 [[package]]
 name = "decorator"
@@ -276,6 +293,17 @@ description = "An implementation of lxml.xmlfile for the standard library"
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[[package]]
+name = "exceptiongroup"
+version = "1.0.0"
+description = "Backport of PEP 654 (exception groups)"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+test = ["pytest (>=6)"]
 
 [[package]]
 name = "fastobo"
@@ -354,6 +382,20 @@ pyjsg = ">=0.11.6"
 rdflib = ">=5.0.0"
 rdflib-shim = "*"
 rfc3987 = "*"
+
+[[package]]
+name = "furo"
+version = "2022.9.29"
+description = "A clean customisable Sphinx documentation theme."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+beautifulsoup4 = "*"
+pygments = ">=2.7"
+sphinx = ">=4.0,<6.0"
+sphinx-basic-ng = "*"
 
 [[package]]
 name = "graphviz"
@@ -565,7 +607,7 @@ linkml-runtime = ">=1.1.24,<2.0.0"
 
 [[package]]
 name = "kgcl-schema"
-version = "0.3.0"
+version = "0.3.1"
 description = "Schema for the KGCL project."
 category = "main"
 optional = false
@@ -591,7 +633,7 @@ atomic_cache = ["atomicwrites"]
 
 [[package]]
 name = "linkml"
-version = "1.3.8"
+version = "1.3.10"
 description = "Linked Open Data Modeling Language"
 category = "main"
 optional = false
@@ -837,20 +879,20 @@ dev = ["pytest", "pre-commit", "pandas", "fire"]
 
 [[package]]
 name = "oaklib"
-version = "0.1.44"
+version = "0.1.49"
 description = "Ontology Access Kit: Python library for common ontology operations over a variety of backends"
 category = "main"
 optional = false
-python-versions = ">=3.9,<4.0"
+python-versions = ">=3.9,<3.12"
 
 [package.dependencies]
 appdirs = ">=1.4.4,<2.0.0"
 bioregistry = ">=0.5.64,<0.6.0"
 class-resolver = ">=0.3.10,<0.4.0"
-curies = ">=0.1.5,<0.2.0"
+curies = ">=0.4.0,<0.5.0"
 funowl = ">=0.1.12,<0.2.0"
 kgcl-rdflib = ">=0.3.0,<0.4.0"
-kgcl-schema = ">=0.3.0,<0.4.0"
+kgcl-schema = ">=0.3.1,<0.4.0"
 lark = ">=1.1.2,<2.0.0"
 linkml-runtime = ">=1.2.15,<2.0.0"
 networkx = ">=2.7.1,<3.0.0"
@@ -1028,15 +1070,15 @@ requests = ">=2.28.1,<3.0.0"
 
 [[package]]
 name = "prefixmaps"
-version = "0.1.3"
-description = ""
+version = "0.1.4"
+description = "A python library for retrieving semantic prefix maps"
 category = "main"
 optional = false
 python-versions = ">=3.7.6,<4.0.0"
 
 [package.dependencies]
 importlib-metadata = ">=4.12.0,<5.0.0"
-PyYAML = ">=6.0,<7.0"
+pyyaml = ">=5.3.1"
 
 [[package]]
 name = "pronto"
@@ -1175,7 +1217,7 @@ xml = ["lxml"]
 
 [[package]]
 name = "pytest"
-version = "7.1.3"
+version = "7.2.0"
 description = "pytest: simple powerful testing with Python"
 category = "main"
 optional = false
@@ -1184,11 +1226,11 @@ python-versions = ">=3.7"
 [package.dependencies]
 attrs = ">=19.2.0"
 colorama = {version = "*", markers = "sys_platform == \"win32\""}
+exceptiongroup = {version = ">=1.0.0rc8", markers = "python_version < \"3.11\""}
 iniconfig = "*"
 packaging = "*"
 pluggy = ">=0.12,<2.0"
-py = ">=1.8.2"
-tomli = ">=1.0.0"
+tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 
 [package.extras]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
@@ -1415,6 +1457,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "soupsieve"
+version = "2.3.2.post1"
+description = "A modern CSS selector implementation for Beautiful Soup."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "sparqlslurper"
 version = "0.5.1"
 description = "SPARQL Slurper for rdflib"
@@ -1470,6 +1520,7 @@ sphinxcontrib-htmlhelp = ">=2.0.0"
 sphinxcontrib-jsmath = "*"
 sphinxcontrib-qthelp = "*"
 sphinxcontrib-serializinghtml = ">=1.1.5"
+sphinxcontrib-websupport = {version = "*", optional = true, markers = "extra == \"docs\""}
 
 [package.extras]
 docs = ["sphinxcontrib-websupport"]
@@ -1480,17 +1531,32 @@ test = ["pytest (>=4.6)", "html5lib", "typed-ast", "cython"]
 name = "sphinx-autodoc-typehints"
 version = "1.19.4"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
+furo = {version = ">=2022.9.15", optional = true, markers = "extra == \"docs\""}
 sphinx = ">=5.2.1"
 
 [package.extras]
 docs = ["furo (>=2022.9.15)", "sphinx-autodoc-typehints (>=1.19.3)", "sphinx (>=5.2.1)"]
 testing = ["covdefaults (>=2.2)", "coverage (>=6.4.4)", "diff-cover (>=7.0.1)", "nptyping (>=2.3.1)", "pytest-cov (>=3)", "pytest (>=7.1.3)", "sphobjinv (>=2.2.2)", "typing-extensions (>=4.3)"]
 type-comment = ["typed-ast (>=1.5.4)"]
+
+[[package]]
+name = "sphinx-basic-ng"
+version = "1.0.0b1"
+description = "A modern skeleton for Sphinx themes."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+sphinx = ">=4.0"
+
+[package.extras]
+docs = ["furo", "myst-parser", "sphinx-copybutton", "sphinx-inline-tabs", "ipython"]
 
 [[package]]
 name = "sphinx-click"
@@ -1509,7 +1575,7 @@ sphinx = ">=2.0"
 name = "sphinx-rtd-theme"
 version = "1.0.0"
 description = "Read the Docs theme for Sphinx"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
 
@@ -1590,6 +1656,21 @@ python-versions = ">=3.5"
 [package.extras]
 lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+
+[[package]]
+name = "sphinxcontrib-websupport"
+version = "1.2.4"
+description = "Sphinx API for Web Apps"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.dependencies]
+sphinxcontrib-serializinghtml = "*"
+
+[package.extras]
+lint = ["flake8"]
+test = ["pytest", "sqlalchemy", "whoosh", "sphinx"]
 
 [[package]]
 name = "sqlalchemy"
@@ -1701,7 +1782,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "tox"
-version = "3.26.0"
+version = "3.27.0"
 description = "tox is a generic virtualenv management and test command line tool"
 category = "main"
 optional = false
@@ -1775,19 +1856,19 @@ test = ["pytest (>=2.2.3)", "flake8 (>=2.4.0)", "isort (>=4.2.2)"]
 
 [[package]]
 name = "virtualenv"
-version = "20.16.5"
+version = "20.16.6"
 description = "Virtual Python Environment builder"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-distlib = ">=0.3.5,<1"
+distlib = ">=0.3.6,<1"
 filelock = ">=3.4.1,<4"
 platformdirs = ">=2.4,<3"
 
 [package.extras]
-docs = ["proselint (>=0.13)", "sphinx (>=5.1.1)", "sphinx-argparse (>=0.3.1)", "sphinx-rtd-theme (>=1)", "towncrier (>=21.9)"]
+docs = ["proselint (>=0.13)", "sphinx (>=5.3)", "sphinx-argparse (>=0.3.2)", "sphinx-rtd-theme (>=1)", "towncrier (>=22.8)"]
 testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7)", "packaging (>=21.3)", "pytest (>=7.0.1)", "pytest-env (>=0.6.2)", "pytest-freezegun (>=0.4.2)", "pytest-mock (>=3.6.1)", "pytest-randomly (>=3.10.3)", "pytest-timeout (>=2.1)"]
 
 [[package]]
@@ -1823,7 +1904,7 @@ multidict = ">=4.0"
 
 [[package]]
 name = "zipp"
-version = "3.9.0"
+version = "3.10.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
 category = "main"
 optional = false
@@ -1834,12 +1915,12 @@ docs = ["sphinx (>=3.5)", "jaraco.packaging (>=9)", "rst.linker (>=1.9)", "furo"
 testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "flake8 (<5)", "pytest-cov", "pytest-enabler (>=1.3)", "jaraco.itertools", "func-timeout", "jaraco.functools", "more-itertools", "pytest-black (>=0.3.7)", "pytest-mypy (>=0.9.1)"]
 
 [extras]
-docs = []
+docs = ["sphinx", "sphinx-rtd-theme", "sphinx-autodoc-typehints", "sphinx-click", "myst-parser"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.9"
-content-hash = "f220404ce20c484430b445cbcf063259183a6d85fa7e6a751066582853527d6f"
+python-versions = ">=3.9,<3.12"
+content-hash = "cdeadcf5911dffed0cb7d0e3c40b61f10fa100884c984ea0de4294daf04174dd"
 
 [metadata.files]
 aiohttp = []
@@ -1851,6 +1932,7 @@ async-timeout = []
 attrs = []
 babel = []
 bcp47 = []
+beautifulsoup4 = []
 bioregistry = []
 bottle = []
 certifi = []
@@ -1867,11 +1949,13 @@ deprecation = []
 distlib = []
 docutils = []
 et-xmlfile = []
+exceptiongroup = []
 fastobo = []
 filelock = []
 frozenlist = []
 fsspec = []
 funowl = []
+furo = []
 graphviz = []
 greenlet = []
 hbreader = []
@@ -1953,10 +2037,12 @@ shexjsg = []
 six = []
 snowballstemmer = []
 sortedcontainers = []
+soupsieve = []
 sparqlslurper = []
 sparqlwrapper = []
 sphinx = []
 sphinx-autodoc-typehints = []
+sphinx-basic-ng = []
 sphinx-click = []
 sphinx-rtd-theme = []
 sphinxcontrib-applehelp = []
@@ -1965,6 +2051,7 @@ sphinxcontrib-htmlhelp = []
 sphinxcontrib-jsmath = []
 sphinxcontrib-qthelp = []
 sphinxcontrib-serializinghtml = []
+sphinxcontrib-websupport = []
 sqlalchemy = []
 sqlalchemy-utils = []
 sssom = []
