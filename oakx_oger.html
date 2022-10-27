@@ -43,8 +43,11 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">oakx_oger</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">oakx_oger package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#oakx-oger-cli-module">oakx_oger.cli module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#oakx-oger-oger-implementation-module">oakx_oger.oger_implementation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-oakx_oger.cli">oakx_oger.cli module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-oakx_oger.oger_implementation">oakx_oger.oger_implementation module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#oakx_oger.oger_implementation.OGERImplementation"><code class="docutils literal notranslate"><span class="pre">OGERImplementation</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-oakx_oger">Module contents</a></li>
 </ul>
 </li>
@@ -82,11 +85,60 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
-<section id="oakx-oger-cli-module">
-<h2>oakx_oger.cli module<a class="headerlink" href="#oakx-oger-cli-module" title="Permalink to this heading"></a></h2>
+<section id="module-oakx_oger.cli">
+<span id="oakx-oger-cli-module"></span><h2>oakx_oger.cli module<a class="headerlink" href="#module-oakx_oger.cli" title="Permalink to this heading"></a></h2>
+<p>Command line interface for oakx-oger.</p>
 </section>
-<section id="oakx-oger-oger-implementation-module">
-<h2>oakx_oger.oger_implementation module<a class="headerlink" href="#oakx-oger-oger-implementation-module" title="Permalink to this heading"></a></h2>
+<section id="module-oakx_oger.oger_implementation">
+<span id="oakx-oger-oger-implementation-module"></span><h2>oakx_oger.oger_implementation module<a class="headerlink" href="#module-oakx_oger.oger_implementation" title="Permalink to this heading"></a></h2>
+<p>OGER Implementation.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">oakx_oger.oger_implementation.</span></span><span class="sig-name descname"><span class="pre">OGERImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autosave=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_owl_top_and_bottom=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ontology_metamodel_mapper=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_converter=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotatorInterface</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">OboGraphInterface</span></code></p>
+<p>OGER Implementation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation.annotate_file">
+<span class="sig-name descname"><span class="pre">annotate_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation.annotate_file" title="Permalink to this definition"></a></dt>
+<dd><p>Annotate text from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> – Text to be annotated.</p></li>
+<li><p><strong>configuration</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotationConfiguration</span></code>) – TextAnnotationConfiguration , defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yield</dt>
+<dd class="field-even"><p>Annotated result</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotation</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation.annotate_text">
+<span class="sig-name descname"><span class="pre">annotate_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation.annotate_text" title="Permalink to this definition"></a></dt>
+<dd><p>Annotate text from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Text to be annotated.</p></li>
+<li><p><strong>configuration</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotationConfiguration</span></code>) – TextAnnotationConfiguration , defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yield</dt>
+<dd class="field-even"><p>Annotated result</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotation</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-oakx_oger">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-oakx_oger" title="Permalink to this heading"></a></h2>
