@@ -1,0 +1,29 @@
+oakx\_oger package
+==================
+
+Submodules
+----------
+
+oakx\_oger.cli module
+---------------------
+
+.. automodule:: oakx_oger.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+oakx\_oger.oger\_implementation module
+--------------------------------------
+
+.. automodule:: oakx_oger.oger_implementation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: oakx_oger
+   :members:
+   :undoc-members:
+   :show-inheritance:
