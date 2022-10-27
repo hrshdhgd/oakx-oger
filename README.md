@@ -23,6 +23,6 @@ Input ontologies generally used `oaklib` can be used with an `oger:` prefix.
 Note: This has been tested only with `oger:sqlite:obo:*` for now.
 
 
-# Acknowledgements
+## Acknowledgements
 
 This [cookiecutter](https://cookiecutter.readthedocs.io/en/stable/README.html) project was developed from the [oakx-plugin-cookiecutter](https://github.com/INCATools/oakx-plugin-cookiecutter) template and will be kept up-to-date using [cruft](https://cruft.github.io/cruft/).
