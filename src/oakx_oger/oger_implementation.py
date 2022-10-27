@@ -44,18 +44,18 @@ OGER_CONFIG = {
 @dataclass
 class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
     """OGER Implementation."""
+
     terms_dir = TERMS_DIR
     output_dir = OUT_DIR
     input_dir = Path(__file__).resolve().parent / "input"
-    
+
     def __post_init__(self):
         """Initialize the OGERImplementation class."""
         slug = self.resource.slug
         self.oi = get_implementation_from_shorthand(slug)
         ont = slug.split(":")[-1]
         self.termlist_fn = ont + "_termlist.tsv"
-        self.termlist_pickle_fn = self.termlist_fn+".pickle"
-        
+        self.termlist_pickle_fn = self.termlist_fn + ".pickle"
 
     def _create_termlist(self, slug: str, path: Path) -> None:
         """
@@ -94,7 +94,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         """
         termlist_filepath = self.terms_dir / self.termlist_fn
         termlist_pickle_filepath = self.terms_dir / self.termlist_pickle_fn
-        
+
         if termlist_pickle_filepath.is_file:
             logging.info(f"Termlist exists at {termlist_pickle_filepath}")
         elif termlist_filepath.is_file():
@@ -105,7 +105,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         if isinstance(text_file, TextIOWrapper):
             text_file = Path(text_file.name)
         OGER_CONFIG["input-directory"] = str(text_file.resolve().parent)
-        OGER_CONFIG["output-directory"] = self.output_dir
+        OGER_CONFIG["output-directory"] = str(self.output_dir)
         OGER_CONFIG["termlist_path"] = str(termlist_filepath)
         og_run(n_workers=1, **OGER_CONFIG)
         with open(self.output_dir / OUT_FILE, "r") as f:
