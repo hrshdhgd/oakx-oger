@@ -20,14 +20,12 @@ __all__ = [
 ]
 
 TERMS_DIR = Path(__file__).resolve().parent / "terms"
-INPUT_DIR = Path(__file__).resolve().parent / "input"
 OUT_DIR = Path(__file__).resolve().parent / "output"
 OUT_FILE = "None.tsv"
 BIOLINK_CLASS = "biolink:OntologyClass"
 
 OGER_CONFIG = {
     "include_header": "True",
-    "output-directory": str(OUT_DIR),
     "pointer-type": "glob",
     "pointers": "*.txt",
     "iter-mode": "collection",
@@ -46,19 +44,18 @@ OGER_CONFIG = {
 @dataclass
 class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
     """OGER Implementation."""
-
+    terms_dir = TERMS_DIR
+    output_dir = OUT_DIR
+    input_dir = Path(__file__).resolve().parent / "input"
+    
     def __post_init__(self):
         """Initialize the OGERImplementation class."""
         slug = self.resource.slug
         self.oi = get_implementation_from_shorthand(slug)
         ont = slug.split(":")[-1]
-        termlist_fn = ont + "_termlist.tsv"
-        termlist_filepath = TERMS_DIR / termlist_fn
-        if termlist_filepath.is_file():
-            logging.info(f"Termlist exists at {termlist_filepath}")
-        else:
-            self._create_termlist(slug, termlist_filepath)
-        OGER_CONFIG["termlist_path"] = str(termlist_filepath)
+        self.termlist_fn = ont + "_termlist.tsv"
+        self.termlist_pickle_fn = self.termlist_fn+".pickle"
+        
 
     def _create_termlist(self, slug: str, path: Path) -> None:
         """
@@ -95,11 +92,23 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         :param configuration: TextAnnotationConfiguration , defaults to None
         :yield: Annotated result
         """
+        termlist_filepath = self.terms_dir / self.termlist_fn
+        termlist_pickle_filepath = self.terms_dir / self.termlist_pickle_fn
+        
+        if termlist_pickle_filepath.is_file:
+            logging.info(f"Termlist exists at {termlist_pickle_filepath}")
+        elif termlist_filepath.is_file():
+            logging.info(f"Termlist exists at {termlist_filepath}")
+        else:
+            self._create_termlist(self.resource.slug, termlist_filepath)
+
         if isinstance(text_file, TextIOWrapper):
             text_file = Path(text_file.name)
         OGER_CONFIG["input-directory"] = str(text_file.resolve().parent)
+        OGER_CONFIG["output-directory"] = self.output_dir
+        OGER_CONFIG["termlist_path"] = str(termlist_filepath)
         og_run(n_workers=1, **OGER_CONFIG)
-        with open(OUT_DIR / OUT_FILE, "r") as f:
+        with open(self.output_dir / OUT_FILE, "r") as f:
             reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
                 yield TextAnnotation(
@@ -118,7 +127,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         :param configuration: TextAnnotationConfiguration , defaults to None
         :yield: Annotated result
         """
-        text_file: Path = INPUT_DIR / "input.txt"
+        text_file: Path = self.input_dir / "tmp/input.txt"
         text_file.parent.mkdir(exist_ok=True, parents=True)
         text_file.write_text(text)
         return self.annotate_file(text_file, configuration)

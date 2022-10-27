@@ -14,7 +14,9 @@ class TestOGERImplementation(unittest.TestCase):
     def setUp(self) -> None:
         """Set up implementation."""
         self.impl = get_implementation_from_shorthand("oger:sqlite:obo:pato")
-        self.input_file = Path(__file__).resolve().parent / "input/text.txt"
+        self.input_file = Path(__file__).resolve().parents[1] / "tests/input/text.txt"
+        self.impl.output_dir = Path(__file__).resolve().parents[1] / "tests/output/"
+        self.impl.terms_dir = Path(__file__).resolve().parents[1] / "tests/terms/"
         self.input_words = (
             "cultured organisms polar ecosystems atmospheric gas exchange"
         )
