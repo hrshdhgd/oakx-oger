@@ -10,6 +10,7 @@ Welcome to oakx-oger's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   intro.md
    modules
 
 Indices and tables
