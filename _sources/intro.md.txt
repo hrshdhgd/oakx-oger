@@ -8,7 +8,7 @@
 
 ```
 pip install oakx-oger
-runoak -i oger:sqlite:obo:envo annotate "cultured organisms" "polar ecosystems" "atmospheric gas exchange"
+runoak -i oger:sqlite:obo:envo annotate cultured organisms polar ecosystems atmospheric gas exchange
 ```
 
 ## How it works
