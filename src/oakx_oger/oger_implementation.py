@@ -6,6 +6,7 @@ from io import TextIOWrapper
 from pathlib import Path
 from typing import Iterable
 
+import pystow
 from oaklib.datamodels.text_annotator import (
     TextAnnotation,
     TextAnnotationConfiguration,
@@ -14,7 +15,6 @@ from oaklib.interfaces import TextAnnotatorInterface
 from oaklib.interfaces.obograph_interface import OboGraphInterface
 from oaklib.selector import get_implementation_from_shorthand
 from oger.ctrl.run import run as og_run
-import pystow
 
 __all__ = [
     "OGERImplementation",
