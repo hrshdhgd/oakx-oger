@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "oakx-oger"
-version = "0.0.0"
+version = "0.1.2"
 description = "oakx-oger"
 authors = ["Harshad Hegde <hhegde@lbl.gov>"]
 license = "BSD 3"
@@ -55,5 +55,5 @@ include_trailing_comma = true
 reverse_relative = true
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
-build-backend = "poetry_dynamic_versioning.backend"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
