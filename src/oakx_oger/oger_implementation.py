@@ -14,13 +14,15 @@ from oaklib.interfaces import TextAnnotatorInterface
 from oaklib.interfaces.obograph_interface import OboGraphInterface
 from oaklib.selector import get_implementation_from_shorthand
 from oger.ctrl.run import run as og_run
+import pystow
 
 __all__ = [
     "OGERImplementation",
 ]
 
-TERMS_DIR = Path(__file__).resolve().parent / "terms"
-OUT_DIR = Path(__file__).resolve().parent / "output"
+OX_OGER_MODULE = pystow.module("oxoger")
+TERMS_DIR = OX_OGER_MODULE.join("terms")
+OUT_DIR = OX_OGER_MODULE.join("output")
 OUT_FILE = "None.tsv"
 BIOLINK_CLASS = "biolink:OntologyClass"
 
@@ -95,7 +97,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         termlist_filepath = self.terms_dir / self.termlist_fn
         termlist_pickle_filepath = self.terms_dir / self.termlist_pickle_fn
 
-        if termlist_pickle_filepath.is_file:
+        if termlist_pickle_filepath.is_file():
             logging.info(f"Termlist exists at {termlist_pickle_filepath}")
         elif termlist_filepath.is_file():
             logging.info(f"Termlist exists at {termlist_filepath}")
@@ -107,6 +109,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         OGER_CONFIG["input-directory"] = str(text_file.resolve().parent)
         OGER_CONFIG["output-directory"] = str(self.output_dir)
         OGER_CONFIG["termlist_path"] = str(termlist_filepath)
+
         og_run(n_workers=1, **OGER_CONFIG)
         with open(self.output_dir / OUT_FILE, "r") as f:
             reader = csv.DictReader(f, delimiter="\t")
