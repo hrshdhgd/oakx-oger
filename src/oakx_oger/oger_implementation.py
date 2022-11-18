@@ -3,8 +3,9 @@ import csv
 import logging
 from dataclasses import dataclass
 from io import TextIOWrapper
+from multiprocessing import cpu_count
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, List
 
 import pystow
 from oaklib.datamodels.text_annotator import (
@@ -26,6 +27,13 @@ OUT_DIR = OX_OGER_MODULE.join("output")
 OUT_FILE = "None.tsv"
 BIOLINK_CLASS = "biolink:OntologyClass"
 
+#! CLI command:
+#   runoak
+#   -i oger:sqlite:obo:bero
+#   annotate
+#   --text-file src/oakx_oger/input/nlpProposals.tsv
+#   -x exclude.txt
+
 OGER_CONFIG = {
     "include_header": "True",
     "pointer-type": "glob",
@@ -35,7 +43,7 @@ OGER_CONFIG = {
     "export_format": "tsv",
     # "termlist1_path": "data/terms/pato_termlist.tsv",
     # "termlist_stopwords": "data/stopwords/stopWords.txt",
-    "termlist_normalize": "stem-Porter",
+    "termlist_normalize": "lowercase stem-Porter",
     "postfilter": "builtin:remove_overlaps \
         builtin:remove_sametype_overlaps \
         builtin:remove_submatches  \
@@ -50,6 +58,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
     terms_dir = TERMS_DIR
     output_dir = OUT_DIR
     input_dir = Path(__file__).resolve().parent / "input"
+    stopwords_dir = Path(__file__).resolve().parent / "stopwords"
 
     def __post_init__(self):
         """Initialize the OGERImplementation class."""
@@ -58,8 +67,12 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         ont = slug.split(":")[-1]
         self.termlist_fn = ont + "_termlist.tsv"
         self.termlist_pickle_fn = self.termlist_fn + ".pickle"
+        self.stopwords = self.stopwords_dir / "stopwords.txt"
+        self.workers = cpu_count() // 2 - 1
 
-    def _create_termlist(self, slug: str, path: Path) -> None:
+    def _create_termlist(
+        self, slug: str, path: Path, terms_to_remove: List[str]
+    ) -> None:
         """
         Create an ontology termlist file which forms the ER dictionary.
 
@@ -70,7 +83,11 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         """
         with open(path, "w") as t:
             for node in self.oi.entities():
-                if self.oi.label(node):
+                if self.oi.label(node) and self.oi.label(
+                    node
+                ).casefold() not in map(
+                    lambda tok: tok.casefold(), terms_to_remove
+                ):
                     t.write(
                         "\t".join(
                             [
@@ -86,7 +103,9 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                     )
 
     def annotate_file(
-        self, text_file: Path, configuration: TextAnnotationConfiguration
+        self,
+        text_file: Path,
+        configuration: TextAnnotationConfiguration,
     ) -> Iterable[TextAnnotation]:
         """Annotate text from a file.
 
@@ -96,21 +115,35 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         """
         termlist_filepath = self.terms_dir / self.termlist_fn
         termlist_pickle_filepath = self.terms_dir / self.termlist_pickle_fn
+        with open(self.stopwords, "r") as st:
+            stopwords = set(st.read().splitlines())
+        if hasattr(configuration, "token_exclusion_list"):
+            configuration.token_exclusion_list.extend(list(stopwords))
+        else:
+            configuration.token_exclusion_list = list(stopwords)
 
         if termlist_pickle_filepath.is_file():
             logging.info(f"Termlist exists at {termlist_pickle_filepath}")
         elif termlist_filepath.is_file():
             logging.info(f"Termlist exists at {termlist_filepath}")
         else:
-            self._create_termlist(self.resource.slug, termlist_filepath)
+            self._create_termlist(
+                self.resource.slug,
+                termlist_filepath,
+                configuration.token_exclusion_list,
+            )
 
         if isinstance(text_file, TextIOWrapper):
             text_file = Path(text_file.name)
+            if text_file.suffix == ".tsv":
+                OGER_CONFIG["pointers"] = "*" + text_file.suffix
+                OGER_CONFIG["article-format"] += "_tsv"
         OGER_CONFIG["input-directory"] = str(text_file.resolve().parent)
         OGER_CONFIG["output-directory"] = str(self.output_dir)
         OGER_CONFIG["termlist_path"] = str(termlist_filepath)
+        OGER_CONFIG["termlist_stopwords"] = str(self.stopwords)
 
-        og_run(n_workers=1, **OGER_CONFIG)
+        og_run(n_workers=self.workers, **OGER_CONFIG)
         with open(self.output_dir / OUT_FILE, "r") as f:
             reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
