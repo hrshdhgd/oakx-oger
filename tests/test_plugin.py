@@ -7,7 +7,7 @@ from oaklib.selector import get_resource_from_shorthand
 from tests import TEST_OWL
 
 
-class TestOGERImplementation(unittest.TestCase):
+class TestPlugin(unittest.TestCase):
     """Test OGERImplementation."""
 
     def test_plugin(self):
