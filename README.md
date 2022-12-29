@@ -1,6 +1,6 @@
 # oakx-oger
 
-[OGER](https://github.com/OntoGene/OGER) wrapper for oaklib.
+This is an [OGER](https://github.com/OntoGene/OGER) plugin for `oaklib`.
 
 **ALPHA**
 
@@ -13,9 +13,7 @@ runoak -i oger:sqlite:obo:envo annotate cultured organisms polar ecosystems atmo
 
 ## How it works
 
-This plugin implements an [OGER](https://github.com/OntoGene/OGER) wrapper.
-
-There are two possible inputs to this wrapper:
+There are two possible inputs to this plugin:
 1. A `.txt` file [`runoak -i oger:sqlite:obo:envo annotate --text-file text.txt`]
 2. Words that need to be annotated.[`runoak -i oger:sqlite:obo:envo annotate cultured organisms polar ecosystems atmospheric gas exchange`]
 
