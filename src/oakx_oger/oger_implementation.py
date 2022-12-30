@@ -27,7 +27,7 @@ OUT_DIR = OX_OGER_MODULE.join("output")
 OUT_FILE = "None.tsv"
 BIOLINK_CLASS = "biolink:OntologyClass"
 
-#! CLI command:
+# ! CLI command:
 #   runoak
 #   -i oger:sqlite:obo:bero
 #   annotate
@@ -166,4 +166,4 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         text_file: Path = self.input_dir / "tmp/input.txt"
         text_file.parent.mkdir(exist_ok=True, parents=True)
         text_file.write_text(text)
-        return self.annotate_file(text_file, configuration)
+        yield from self.annotate_file(text_file, configuration)
