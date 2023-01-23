@@ -138,6 +138,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
             if text_file.suffix == ".tsv":
                 OGER_CONFIG["pointers"] = "*" + text_file.suffix
                 OGER_CONFIG["article-format"] += "_tsv"
+                OUT_FILE = text_file.name
         OGER_CONFIG["input-directory"] = str(text_file.resolve().parent)
         OGER_CONFIG["output-directory"] = str(self.output_dir)
         OGER_CONFIG["termlist_path"] = str(termlist_filepath)
@@ -148,10 +149,11 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
             reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
                 yield TextAnnotation(
-                    subject_text_id=row["ENTITY ID"],
-                    subject_label=row["MATCHED TERM"],
+                    object_id=row["ENTITY ID"],
+                    object_label=row["MATCHED TERM"],
                     subject_start=row["START POSITION"],
                     subject_end=row["END POSITION"],
+                    subject_text_id=row["DOCUMENT ID"]
                 )
 
     def annotate_text(
