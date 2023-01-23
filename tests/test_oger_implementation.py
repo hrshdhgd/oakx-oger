@@ -34,7 +34,7 @@ class TestOGERImplementation(unittest.TestCase):
             self.impl.annotate_file(self.input_file, self.configuration)
         )
         self.assertEqual(len(results), 13)
-        self.assertTrue(ORGANISMS in [x.subject_text_id for x in results])
+        self.assertTrue(ORGANISMS in [x.object_id for x in results])
 
     def test_annotate_text(self):
         """Test annotation of text."""
@@ -42,4 +42,4 @@ class TestOGERImplementation(unittest.TestCase):
             self.impl.annotate_text(self.input_words, self.configuration)
         )
         self.assertEqual(len(results), 16)
-        self.assertTrue(ORGANISMS in [x.subject_text_id for x in results])
+        self.assertTrue(ORGANISMS in [x.object_id for x in results])

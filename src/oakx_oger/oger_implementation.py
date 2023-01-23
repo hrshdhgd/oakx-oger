@@ -24,7 +24,6 @@ __all__ = [
 OX_OGER_MODULE = pystow.module("oxoger")
 TERMS_DIR = OX_OGER_MODULE.join("terms")
 OUT_DIR = OX_OGER_MODULE.join("output")
-OUT_FILE = "None.tsv"
 BIOLINK_CLASS = "biolink:OntologyClass"
 
 # ! CLI command:
@@ -113,6 +112,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         :param configuration: TextAnnotationConfiguration , defaults to None
         :yield: Annotated result
         """
+        OUT_FILE = "None.tsv"
         termlist_filepath = self.terms_dir / self.termlist_fn
         termlist_pickle_filepath = self.terms_dir / self.termlist_pickle_fn
         with open(self.stopwords, "r") as st:
@@ -135,10 +135,10 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
 
         if isinstance(text_file, TextIOWrapper):
             text_file = Path(text_file.name)
+            OUT_FILE = text_file.name
             if text_file.suffix == ".tsv":
                 OGER_CONFIG["pointers"] = "*" + text_file.suffix
                 OGER_CONFIG["article-format"] += "_tsv"
-                OUT_FILE = text_file.name
         OGER_CONFIG["input-directory"] = str(text_file.resolve().parent)
         OGER_CONFIG["output-directory"] = str(self.output_dir)
         OGER_CONFIG["termlist_path"] = str(termlist_filepath)
@@ -153,7 +153,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                     object_label=row["MATCHED TERM"],
                     subject_start=row["START POSITION"],
                     subject_end=row["END POSITION"],
-                    subject_text_id=row["DOCUMENT ID"]
+                    subject_text_id=row["DOCUMENT ID"],
                 )
 
     def annotate_text(
