@@ -250,5 +250,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         """
         text_file: Path = self.input_dir / "tmp/input.txt"
         text_file.parent.mkdir(exist_ok=True, parents=True)
+        if isinstance(text, tuple):
+            text = " ".join(text)
         text_file.write_text(text)
         yield from self.annotate_file(text_file, configuration)
