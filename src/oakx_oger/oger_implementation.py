@@ -8,6 +8,8 @@ from pathlib import Path
 from typing import Iterable, List
 
 import pystow
+import yaml
+from nltk import ne_chunk, pos_tag, word_tokenize
 from oaklib.datamodels.text_annotator import (
     TextAnnotation,
     TextAnnotationConfiguration,
@@ -16,9 +18,6 @@ from oaklib.interfaces import TextAnnotatorInterface
 from oaklib.interfaces.obograph_interface import OboGraphInterface
 from oaklib.selector import get_implementation_from_shorthand
 from oger.ctrl.run import run as og_run
-from nltk import ne_chunk, pos_tag, word_tokenize
-from nltk.stem.wordnet import WordNetLemmatizer
-import yaml
 
 __all__ = [
     "OGERImplementation",
@@ -117,7 +116,6 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         :param configuration: TextAnnotationConfiguration , defaults to None
         :yield: Annotated result
         """
-        
         termlist_filepath = self.terms_dir / self.termlist_fn
         termlist_pickle_filepath = self.terms_dir / self.termlist_pickle_fn
         with open(self.stopwords, "r") as st:
@@ -150,47 +148,86 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         OGER_CONFIG["termlist_stopwords"] = str(self.stopwords)
 
         og_run(n_workers=self.workers, **OGER_CONFIG)
-        self.post_output = self.output_dir / self.outfile.replace(".tsv", "_postProcessed.tsv")
+        self.post_output = self.output_dir / self.outfile.replace(
+            ".tsv", "_postProcessed.tsv"
+        )
         with open(text_file, "r") as f:
-            text_list= f.readlines()
-            tagged_dict = {}
-            for text in text_list:
-                idx, txt = text.strip().split("\t")
-                if txt !="text":
+            text_list = f.readlines()
+            tagged_dict: dict = {}
+            for i, text in enumerate(text_list):
+                if "\t" in text:
+                    idx, txt = text.strip().split("\t")
+                else:
+                    idx = str(i)
+                    txt = text.strip()
+                if txt != "text":
                     if idx not in tagged_dict:
                         tagged_dict[idx] = {}
-                    for named_entity in ne_chunk(pos_tag(list(set(word_tokenize(txt))))):
-                        if isinstance(named_entity,tuple):
+                    for named_entity in ne_chunk(
+                        pos_tag(list(set(word_tokenize(txt))))
+                    ):
+                        if isinstance(named_entity, tuple):
                             token, pos = named_entity
                             tagged_dict[idx][token] = {
-                                    "POS": pos,
-                                }
-                            
+                                "POS": pos,
+                            }
+
                         else:
                             token, pos = named_entity[0]
                             tagged_dict[idx][token] = {
-                                    "POS": pos,
-                                    "entity": named_entity.label(),
-                                }
-                            
+                                "POS": pos,
+                                "entity": named_entity.label(),
+                            }
+
             with open(self.ner_metadata, "w") as f:
                 yaml.safe_dump(tagged_dict, f)
 
-        with open(self.output_dir / self.outfile, "r") as f, open(self.post_output, "w",newline="") as o:
+        with open(self.output_dir / self.outfile, "r") as f, open(
+            self.post_output, "w", newline=""
+        ) as o:
             input_reader = csv.DictReader(f, delimiter="\t")
             for row in input_reader:
-                if not "fieldnames" in locals():
+                if "fieldnames" not in locals():
                     fieldnames = list(row.keys())
                     fieldnames.extend(["POS", "entity"])
-                    output_writer = csv.DictWriter(o, delimiter="\t", fieldnames=fieldnames)
+                    output_writer = csv.DictWriter(
+                        o, delimiter="\t", fieldnames=fieldnames
+                    )
                     output_writer.writeheader()
-                
-                if row['MATCHED TERM'] in tagged_dict[row['DOCUMENT ID']]:
-                    row.update(tagged_dict[row['DOCUMENT ID']][row['MATCHED TERM']])
-                elif row['MATCHED TERM'].lower() in tagged_dict[row['DOCUMENT ID']]:
-                    row.update(tagged_dict[row['DOCUMENT ID']][row['MATCHED TERM'].lower()])
+                if row["DOCUMENT ID"] in tagged_dict:
+                    # Usual TSV inpput file
+                    if row["MATCHED TERM"] in tagged_dict[row["DOCUMENT ID"]]:
+                        row.update(
+                            tagged_dict[row["DOCUMENT ID"]][
+                                row["MATCHED TERM"]
+                            ]
+                        )
+                    elif (
+                        row["MATCHED TERM"].lower()
+                        in tagged_dict[row["DOCUMENT ID"]]
+                    ):
+                        row.update(
+                            tagged_dict[row["DOCUMENT ID"]][
+                                row["MATCHED TERM"].lower()
+                            ]
+                        )
+                    else:
+                        logging.info(
+                            f"{row['MATCHED TERM']} doesn't have \
+                                POS/entity info."
+                        )
                 else:
-                    logging.info(f"{row['MATCHED TERM']} does not have POS or entity info.")
+                    # Text is provided or txt file used.
+                    for _, v in tagged_dict.items():
+                        if row["MATCHED TERM"] in v:
+                            row.update(v[row["MATCHED TERM"]])
+                        elif row["MATCHED TERM"].lower() in v:
+                            row.update(v[row["MATCHED TERM"].lower()])
+                        else:
+                            logging.info(
+                                f"{row['MATCHED TERM']} doesn't have \
+                                    POS/entity info."
+                            )
 
                 output_writer.writerow(row)
 
@@ -201,7 +238,6 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                     subject_end=row["END POSITION"],
                     subject_text_id=row["DOCUMENT ID"],
                 )
-        
 
     def annotate_text(
         self, text: str, configuration: TextAnnotationConfiguration
