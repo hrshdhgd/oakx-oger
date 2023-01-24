@@ -1,9 +1,9 @@
 DOCUMENT ID	TYPE	START POSITION	END POSITION	MATCHED TERM	PREFERRED FORM	ENTITY ID	ZONE	SENTENCE ID	ORIGIN	UMLS CUI	POS	entity
-input	biolink:OntologyClass	9	18	organisms	organized	PATO:0000938		S1	sqlite:obo:pato	CUI-less	VBP	
-input	biolink:OntologyClass	9	18	organisms	organ	UBERON:0000062		S1	sqlite:obo:pato	CUI-less	VBP	
+input	biolink:OntologyClass	9	18	organisms	organized	PATO:0000938		S1	sqlite:obo:pato	CUI-less	NNS	
+input	biolink:OntologyClass	9	18	organisms	organ	UBERON:0000062		S1	sqlite:obo:pato	CUI-less	NNS	
 input	biolink:OntologyClass	19	24	polar	polarity	PATO:0002186		S1	sqlite:obo:pato	CUI-less	JJ	
-text	biolink:OntologyClass	27	36	organisms	organized	PATO:0000938		S1	sqlite:obo:pato	CUI-less	VBP	
-text	biolink:OntologyClass	27	36	organisms	organ	UBERON:0000062		S1	sqlite:obo:pato	CUI-less	VBP	
+text	biolink:OntologyClass	27	36	organisms	organized	PATO:0000938		S1	sqlite:obo:pato	CUI-less	NNS	
+text	biolink:OntologyClass	27	36	organisms	organ	UBERON:0000062		S1	sqlite:obo:pato	CUI-less	NNS	
 text	biolink:OntologyClass	60	76	polyploidization	polyploid	PATO:0001377		S1	sqlite:obo:pato	CUI-less		
 text	biolink:OntologyClass	84	89	polar	polarity	PATO:0002186		S1	sqlite:obo:pato	CUI-less	JJ	
 text	biolink:OntologyClass	233	239	energy	energy	PATO:0001021		S1	sqlite:obo:pato	CUI-less		
