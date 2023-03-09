@@ -1,6 +1,6 @@
 # oakx-oger
 
-This is an [OGER](https://github.com/OntoGene/OGER) plugin for `oaklib`.
+This is an [OGER](https://github.com/OntoGene/OGER) plugin for [`oaklib`](https://github.com/INCATools/ontology-access-kit).
 
 **ALPHA**
 
