@@ -6,6 +6,7 @@ from io import TextIOWrapper
 from multiprocessing import cpu_count
 from pathlib import Path
 from typing import Iterable, List
+import nltk
 
 import pystow
 import yaml
@@ -18,6 +19,8 @@ from oaklib.interfaces import TextAnnotatorInterface
 from oaklib.interfaces.obograph_interface import OboGraphInterface
 from oaklib.selector import get_implementation_from_shorthand
 from oger.ctrl.run import run as og_run
+
+nltk.download("punkt")
 
 __all__ = [
     "OGERImplementation",
