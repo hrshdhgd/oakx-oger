@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oakx_oger package &mdash; oakx-oger 0.1.2 documentation</title>
@@ -28,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> oakx-oger
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            oakx-oger
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -69,7 +73,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="modules.html">oakx_oger</a></li>
       <li class="breadcrumb-item active">oakx_oger package</li>
       <li class="wy-breadcrumbs-aside">
@@ -95,7 +99,7 @@
 <p>OGER Implementation.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">oakx_oger.oger_implementation.</span></span><span class="sig-name descname"><span class="pre">OGERImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilingual=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preferred_language=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autosave=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_owl_top_and_bottom=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ontology_metamodel_mapper=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_converter=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">oakx_oger.oger_implementation.</span></span><span class="sig-name descname"><span class="pre">OGERImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilingual=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preferred_language=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autosave=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_owl_top_and_bottom=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ontology_metamodel_mapper=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_converter=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_relax_axioms=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_lookups=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotatorInterface</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">OboGraphInterface</span></code></p>
 <p>OGER Implementation.</p>
 <dl class="py method">
@@ -103,16 +107,16 @@
 <span class="sig-name descname"><span class="pre">annotate_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation.annotate_file" title="Permalink to this definition"></a></dt>
 <dd><p>Annotate text from a file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>text</strong> – Text to be annotated.</p></li>
 <li><p><strong>configuration</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotationConfiguration</span></code>) – TextAnnotationConfiguration , defaults to None</p></li>
 </ul>
 </dd>
-<dt class="field-even">Yield</dt>
+<dt class="field-even">Yield<span class="colon">:</span></dt>
 <dd class="field-even"><p>Annotated result</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotation</span></code>]</p>
 </dd>
 </dl>
@@ -123,16 +127,16 @@
 <span class="sig-name descname"><span class="pre">annotate_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation.annotate_text" title="Permalink to this definition"></a></dt>
 <dd><p>Annotate text from a file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Text to be annotated.</p></li>
 <li><p><strong>configuration</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotationConfiguration</span></code>) – TextAnnotationConfiguration , defaults to None</p></li>
 </ul>
 </dd>
-<dt class="field-even">Yield</dt>
+<dt class="field-even">Yield<span class="colon">:</span></dt>
 <dd class="field-even"><p>Annotated result</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotation</span></code>]</p>
 </dd>
 </dl>
