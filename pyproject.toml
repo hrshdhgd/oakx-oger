@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "oakx-oger"
-version = "0.1.2"
+version = "0.1.3"
 description = "oakx-oger"
 authors = ["Harshad Hegde <hhegde@lbl.gov>"]
 license = "BSD 3"
