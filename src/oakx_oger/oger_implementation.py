@@ -6,8 +6,8 @@ from io import TextIOWrapper
 from multiprocessing import cpu_count
 from pathlib import Path
 from typing import Iterable, List
-import nltk
 
+import nltk
 import pystow
 import yaml
 from nltk import ne_chunk, pos_tag, word_tokenize
