@@ -134,3 +134,5 @@ src/oakx_oger/input/*.txt
 src/oakx_oger/output/*.tsv
 exclude.txt
 src/oakx_oger/input/tmp/*.txt
+tests/terms/pato_termlist.tsv
+tests/output/*
