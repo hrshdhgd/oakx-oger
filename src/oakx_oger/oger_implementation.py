@@ -20,7 +20,8 @@ from oaklib.interfaces.obograph_interface import OboGraphInterface
 from oaklib.selector import get_implementation_from_shorthand
 from oger.ctrl.run import run as og_run
 
-nltk.download("punkt")
+nltk.download("punkt")  # for GH Actions.
+nltk.download("averaged_perceptron_tagger")  # for GH Actions.
 
 __all__ = [
     "OGERImplementation",
