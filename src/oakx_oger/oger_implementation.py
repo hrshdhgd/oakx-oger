@@ -22,6 +22,7 @@ from oger.ctrl.run import run as og_run
 
 nltk.download("punkt")  # for GH Actions.
 nltk.download("averaged_perceptron_tagger")  # for GH Actions.
+nltk.download("maxent_ne_chunker")  # for GH Actions.
 
 __all__ = [
     "OGERImplementation",
