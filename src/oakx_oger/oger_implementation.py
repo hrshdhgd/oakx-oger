@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from io import TextIOWrapper
 from multiprocessing import cpu_count
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable, List, Tuple
 
 import nltk
 import pystow
@@ -18,6 +18,8 @@ from oaklib.datamodels.text_annotator import (
 from oaklib.interfaces import TextAnnotatorInterface
 from oaklib.interfaces.obograph_interface import OboGraphInterface
 from oaklib.selector import get_implementation_from_shorthand
+from oaklib.types import CURIE, PRED_CURIE
+from oaklib.interfaces.basic_ontology_interface import ALIAS_MAP
 from oger.ctrl.run import run as og_run
 
 nltk.download("punkt")  # for GH Actions.
@@ -66,14 +68,14 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
     output_dir = OUT_DIR
     input_dir = Path(__file__).resolve().parent / "input"
     stopwords_dir = Path(__file__).resolve().parent / "stopwords"
+    list_of_ontologies = []
 
     def __post_init__(self):
         """Initialize the OGERImplementation class."""
         slug = self.resource.slug
         self.oi = get_implementation_from_shorthand(slug)
         ont = slug.split(":")[-1]
-        self.termlist_fn = ont + "_termlist.tsv"
-        self.termlist_pickle_fn = self.termlist_fn + ".pickle"
+        self.list_of_ontologies.append(ont)
         self.stopwords = self.stopwords_dir / "stopwords.txt"
         self.ner_metadata = self.output_dir / "ner_metadata.yaml"
         self.outfile = "None.tsv"
@@ -122,8 +124,28 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         :param configuration: TextAnnotationConfiguration , defaults to None
         :yield: Annotated result
         """
-        termlist_filepath = self.terms_dir / self.termlist_fn
-        termlist_pickle_filepath = self.terms_dir / self.termlist_pickle_fn
+
+        for idx, ont in enumerate(self.list_of_ontologies):
+            termlist_path_variable = "termlist_path"
+            if len(self.list_of_ontologies) > 1:
+                termlist_path_variable = termlist_path_variable.replace("_", f"{str(int(idx) + 1)}_")
+            termlist_fn = ont + "_termlist.tsv"
+            termlist_pickle_fn = termlist_fn + ".pickle"
+            termlist_filepath = self.terms_dir / termlist_fn
+            termlist_pickle_filepath = self.terms_dir / termlist_pickle_fn
+
+            if termlist_pickle_filepath.is_file():
+                logging.info(f"Termlist exists at {termlist_pickle_filepath}")
+            elif termlist_filepath.is_file():
+                logging.info(f"Termlist exists at {termlist_filepath}")
+            else:
+                self._create_termlist(
+                    self.resource.slug,
+                    termlist_filepath,
+                    configuration.token_exclusion_list,
+                )
+            OGER_CONFIG[termlist_path_variable] = str(termlist_filepath)
+
         with open(self.stopwords, "r") as st:
             stopwords = set(st.read().splitlines())
         if hasattr(configuration, "token_exclusion_list"):
@@ -131,27 +153,16 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         else:
             configuration.token_exclusion_list = list(stopwords)
 
-        if termlist_pickle_filepath.is_file():
-            logging.info(f"Termlist exists at {termlist_pickle_filepath}")
-        elif termlist_filepath.is_file():
-            logging.info(f"Termlist exists at {termlist_filepath}")
-        else:
-            self._create_termlist(
-                self.resource.slug,
-                termlist_filepath,
-                configuration.token_exclusion_list,
-            )
-
         if isinstance(text_file, TextIOWrapper):
             text_file = Path(text_file.name)
             self.outfile = text_file.name
             if text_file.suffix == ".tsv":
                 OGER_CONFIG["pointers"] = "*" + text_file.suffix
-                OGER_CONFIG["article-format"] += "_tsv"
+                OGER_CONFIG["article-format"] = "txt_tsv"
+
+        OGER_CONFIG["termlist_stopwords"] = str(self.stopwords)
         OGER_CONFIG["input-directory"] = str(text_file.resolve().parent)
         OGER_CONFIG["output-directory"] = str(self.output_dir)
-        OGER_CONFIG["termlist_path"] = str(termlist_filepath)
-        OGER_CONFIG["termlist_stopwords"] = str(self.stopwords)
 
         og_run(n_workers=self.workers, **OGER_CONFIG)
         self.post_output = self.output_dir / self.outfile.replace(
@@ -260,3 +271,12 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
             text = " ".join(text)
         text_file.write_text(text)
         yield from self.annotate_file(text_file, configuration)
+
+    def entities(self, filter_obsoletes=True, owl_type=None) -> Iterable[CURIE]:
+        yield from self.oi.entities()
+
+    def entity_alias_map(self, curie: CURIE) -> ALIAS_MAP:
+        return self.oi.entity_alias_map(curie)
+
+    def simple_mappings_by_curie(self, curie: CURIE) -> Iterable[Tuple[PRED_CURIE, CURIE]]:
+        yield from self.oi.simple_mappings_by_curie(curie)
