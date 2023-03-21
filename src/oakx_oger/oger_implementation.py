@@ -1,7 +1,7 @@
 """OGER Implementation."""
 import csv
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from io import TextIOWrapper
 from multiprocessing import cpu_count
 from pathlib import Path
@@ -16,10 +16,10 @@ from oaklib.datamodels.text_annotator import (
     TextAnnotationConfiguration,
 )
 from oaklib.interfaces import TextAnnotatorInterface
+from oaklib.interfaces.basic_ontology_interface import ALIAS_MAP
 from oaklib.interfaces.obograph_interface import OboGraphInterface
 from oaklib.selector import get_implementation_from_shorthand
 from oaklib.types import CURIE, PRED_CURIE
-from oaklib.interfaces.basic_ontology_interface import ALIAS_MAP
 from oger.ctrl.run import run as og_run
 
 nltk.download("punkt")  # for GH Actions.
@@ -68,7 +68,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
     output_dir = OUT_DIR
     input_dir = Path(__file__).resolve().parent / "input"
     stopwords_dir = Path(__file__).resolve().parent / "stopwords"
-    list_of_ontologies = []
+    list_of_ontologies: List[str] = field(default_factory=list)
 
     def __post_init__(self):
         """Initialize the OGERImplementation class."""
@@ -124,11 +124,12 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         :param configuration: TextAnnotationConfiguration , defaults to None
         :yield: Annotated result
         """
-
         for idx, ont in enumerate(self.list_of_ontologies):
             termlist_path_variable = "termlist_path"
             if len(self.list_of_ontologies) > 1:
-                termlist_path_variable = termlist_path_variable.replace("_", f"{str(int(idx) + 1)}_")
+                termlist_path_variable = termlist_path_variable.replace(
+                    "_", f"{str(int(idx) + 1)}_"
+                )
             termlist_fn = ont + "_termlist.tsv"
             termlist_pickle_fn = termlist_fn + ".pickle"
             termlist_filepath = self.terms_dir / termlist_fn
@@ -173,9 +174,9 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
             tagged_dict: dict = {}
             for i, text in enumerate(text_list):
                 if "\t" in text:
-                    idx, txt = text.strip().split("\t")
+                    idx, txt = text.strip().split("\t")  # type: ignore
                 else:
-                    idx = str(i)
+                    idx = str(i)  # type: ignore
                     txt = text.strip()
                 if txt != "text":
                     if idx not in tagged_dict:
@@ -272,11 +273,31 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         text_file.write_text(text)
         yield from self.annotate_file(text_file, configuration)
 
-    def entities(self, filter_obsoletes=True, owl_type=None) -> Iterable[CURIE]:
+    def entities(
+        self, filter_obsoletes=True, owl_type=None
+    ) -> Iterable[CURIE]:
+        """Yield entities from the underlying implementation.
+
+        :param filter_obsoletes: Boolean to filter obsoletes, defaults to True
+        :param owl_type: owl class, defaults to None
+        :yield: CURIE
+        """
         yield from self.oi.entities()
 
     def entity_alias_map(self, curie: CURIE) -> ALIAS_MAP:
+        """Return alias map for a CURIE.
+
+        :param curie: CURIE
+        :return: Alias map.
+        """
         return self.oi.entity_alias_map(curie)
 
-    def simple_mappings_by_curie(self, curie: CURIE) -> Iterable[Tuple[PRED_CURIE, CURIE]]:
+    def simple_mappings_by_curie(
+        self, curie: CURIE
+    ) -> Iterable[Tuple[PRED_CURIE, CURIE]]:
+        """Yield a tuple o fmappings.
+
+        :param curie: CURIE
+        :yield: Simple mappings as a tuple.
+        """
         yield from self.oi.simple_mappings_by_curie(curie)
