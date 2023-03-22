@@ -99,7 +99,7 @@
 <p>OGER Implementation.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">oakx_oger.oger_implementation.</span></span><span class="sig-name descname"><span class="pre">OGERImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilingual=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preferred_language=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autosave=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_owl_top_and_bottom=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ontology_metamodel_mapper=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_converter=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_relax_axioms=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_lookups=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">oakx_oger.oger_implementation.</span></span><span class="sig-name descname"><span class="pre">OGERImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilingual=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preferred_language=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autosave=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_owl_top_and_bottom=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ontology_metamodel_mapper=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_converter=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_relax_axioms=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_lookups=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_of_ontologies=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TextAnnotatorInterface</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">OboGraphInterface</span></code></p>
 <p>OGER Implementation.</p>
 <dl class="py method">
@@ -142,15 +142,74 @@
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation.entities">
+<span class="sig-name descname"><span class="pre">entities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_obsoletes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owl_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation.entities" title="Permalink to this definition"></a></dt>
+<dd><p>Yield entities from the underlying implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filter_obsoletes</strong> – Boolean to filter obsoletes, defaults to True</p></li>
+<li><p><strong>owl_type</strong> – owl class, defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yield<span class="colon">:</span></dt>
+<dd class="field-even"><p>CURIE</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation.entity_alias_map">
+<span class="sig-name descname"><span class="pre">entity_alias_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curie</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation.entity_alias_map" title="Permalink to this definition"></a></dt>
+<dd><p>Return alias map for a CURIE.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>curie</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – CURIE</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Alias map.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation.input_dir">
 <span class="sig-name descname"><span class="pre">input_dir</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/oakx-oger/oakx-oger/src/oakx_oger/input')</span></em><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation.input_dir" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation.list_of_ontologies">
+<span class="sig-name descname"><span class="pre">list_of_ontologies</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation.list_of_ontologies" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation.output_dir">
 <span class="sig-name descname"><span class="pre">output_dir</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/.data/oxoger/output')</span></em><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation.output_dir" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation.simple_mappings_by_curie">
+<span class="sig-name descname"><span class="pre">simple_mappings_by_curie</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curie</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oakx_oger.oger_implementation.OGERImplementation.simple_mappings_by_curie" title="Permalink to this definition"></a></dt>
+<dd><p>Yield a tuple o fmappings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>curie</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – CURIE</p>
+</dd>
+<dt class="field-even">Yield<span class="colon">:</span></dt>
+<dd class="field-even"><p>Simple mappings as a tuple.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="oakx_oger.oger_implementation.OGERImplementation.stopwords_dir">
