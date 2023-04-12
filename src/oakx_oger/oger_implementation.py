@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import Iterable, List, Tuple
 
 import nltk
-import pandas as pd
 import pystow
 import yaml
 from nltk import ne_chunk, pos_tag, word_tokenize
@@ -19,7 +18,7 @@ from oaklib.datamodels.text_annotator import (
 from oaklib.interfaces import TextAnnotatorInterface
 from oaklib.interfaces.basic_ontology_interface import ALIAS_MAP
 from oaklib.interfaces.obograph_interface import OboGraphInterface
-from oaklib.selector import get_implementation_from_shorthand
+from oaklib.selector import get_adapter
 from oaklib.types import CURIE, PRED_CURIE
 from oger.ctrl.run import run as og_run
 
@@ -28,6 +27,7 @@ from oakx_oger.synonymizer.synonymize import (
     create_new_rows_based_on_rules,
     get_rules_table_from_file,
 )
+import pandas as pd
 
 nltk.download("punkt")  # for GH Actions.
 nltk.download("averaged_perceptron_tagger")  # for GH Actions.
@@ -80,7 +80,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
     def __post_init__(self):
         """Initialize the OGERImplementation class."""
         slug = self.resource.slug
-        self.oi = get_implementation_from_shorthand(slug)
+        self.oi = get_adapter(slug)
         self.ont = slug.split(":")[-1]
         self.list_of_ontologies.append(self.ont)
         self.stopwords = self.stopwords_dir / "stopwords.txt"
