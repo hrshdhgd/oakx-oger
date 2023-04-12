@@ -1,0 +1,180 @@
+rules:
+  - type: NewSynonym
+    description: adding X as synonym for X-activity in GO
+    see_also:
+      - https://github.com/geneontology/go-ontology/issues/21978
+    match: "(.*)(activity)"
+    match_scope: "*"
+    replacement: "\\1"
+    tests:
+      - input: "ChS ABC lyase activity"
+        output: "ChS ABC lyase"
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*)(activity)"
+    match_scope: "*"
+    replacement: "\\1enzyme"
+    qualifier: related
+    tests:
+      - input: "upregulation of CoA-transferase activity"
+        output: "upregulation of CoA-transferase enzyme"
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*)(metabol|catabol)ic process"
+    match_scope: "*"
+    replacement: "\\1\\2ism"
+    qualifier: exact
+    tests:
+      - input: medium chain fatty acid catabolic process
+        output: medium chain fatty acid catabolism
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*)biosynthetic process"
+    match_scope: "*"
+    replacement: "\\1biosynthesis"
+    qualifier: exact
+    tests:
+      - input: regulation of immunoglobulin biosynthetic process
+        output: regulation of immunoglobulin biosynthesis
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*)biosynthetic process"
+    match_scope: "*"
+    replacement: "\\1biosynthesis pathway"
+    qualifier: exact
+    tests:
+      - input: regulation of immunoglobulin biosynthetic process
+        output: regulation of immunoglobulin biosynthesis pathway
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*[^r])ase activity"
+    match_scope: "*"
+    replacement: "\\1ation"
+    qualifier: exact
+    tests:
+      - input: methylase activity
+        output: methylation
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*)rase activity"
+    match_scope: "*"
+    replacement: "\\1rization"
+    qualifier: exact
+    tests:
+      - input: polymerase activity
+        output: polymerization
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*) process"
+    match_scope: "*"
+    replacement: "\\1"
+    qualifier: related
+    tests:
+      - input: carbon sequestration process
+        output: carbon sequestration
+        ontology: ENVO
+  - type: NewSynonym
+    match: "(.+ )(biosynthetic process)"
+    match_scope: "*"
+    replacement: "\\1production"
+    qualifier: exact
+    tests:
+      - input: "hydrogen biosynthetic process"
+        output: "hydrogen production"
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*)(biosynthetic process)"
+    match_scope: "*"
+    replacement: "\\1synthesis"
+    qualifier: exact
+    tests:
+      - input: "regulation of acetylcholine biosynthetic process"
+        output: "regulation of acetylcholine synthesis"
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*)(metabol|catabol)ic process"
+    match_scope: "*"
+    replacement: "\\1\\2ism"
+    qualifier: exact
+    tests:
+      - input: "elastin metabolic process"
+        output: "elastin metabolism"
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*)(biosynthe)tic process"
+    match_scope: "*"
+    replacement: "\\1\\2sis"
+    qualifier: exact
+    tests:
+      - input: "regulation of acetylcholine biosynthetic process"
+        output: "regulation of acetylcholine biosynthesis"
+        ontology: GO
+  - type: NewSynonym
+    match: "(.*)(ecosystem|biome)"
+    match_scope: label|exact
+    replacement: "\\1community"
+    qualifier: exact
+    tests:
+      - input: "subpolar biome"
+        output: "subpolar community"
+        ontology: ENVO
+  - type: NewSynonym
+    match: "(.*)(ecosystem|biome)"
+    match_scope: label|exact
+    replacement: "\\1microbial community"
+    qualifier: exact
+    tests:
+      - input: "terrestrial biome"
+        output: "terrestrial microbial community"
+        ontology: ENVO
+  - type: NewSynonym
+    match: "(.*)(ecosystem|biome)"
+    match_scope: label|exact
+    replacement: "\\1system"
+    qualifier: exact
+    tests:
+      - input: "subpolar biome"
+        output: "subpolar system"
+        ontology: ENVO
+  - type: NewSynonym
+    match: "(.*)(ecosystem|biome)"
+    match_scope: label|exact
+    replacement: "\\1microbiome"
+    qualifier: exact
+    tests:
+      - input: "subpolar biome"
+        output: "subpolar microbiome"
+        ontology: ENVO
+  - type: NewSynonym
+    match: "(^.*)"
+    match_scope: label|exact
+    replacement: "\\1 sample"
+    qualifier: related
+    tests:
+      - input: "marine hadal zone biome"
+        output: "marine hadal zone biome sample"
+        ontology: ENVO
+  - type: NewSynonym
+    match: "(.*)(environment|biome)"
+    replacement: "\\1ecosystem"
+    qualifier: related
+    tests:
+      - input: "small freshwater lake biome"
+        output: "small freshwater lake ecosystem"
+        ontology: ENVO
+  - type: NewSynonym
+    match: "(.*)(environment)"
+    replacement: "\\1microbiota"
+    qualifier: related
+    tests:
+      - input: "gut environment"
+        output: "gut microbiota"
+        ontology: ENVO
+  - type: NewSynonym
+    match: "(.*)(environment)"
+    replacement: "\\1microbiome"
+    qualifier: related
+    tests:
+      - input: "gut environment"
+        output: "gut microbiome"
+        ontology: ENVO

@@ -1,11 +1,14 @@
 """Tests for oakx-oger."""
 
-import os
 from pathlib import Path
 
-ROOT = os.path.abspath(os.path.dirname(__file__))
-INPUT_DIR = Path(ROOT) / "input"
-OUTPUT_DIR = Path(ROOT) / "output"
+PROJECT_DIR = Path(__file__).resolve().parents[1]
+SYNONYMER_DIR = PROJECT_DIR.joinpath("src/oakx_oger/synonymizer/")
+RULES_FILE = SYNONYMER_DIR.joinpath("synonym_rules.yaml")
+
+TESTS_DIR = Path(__file__).resolve().parent
+INPUT_DIR = Path(TESTS_DIR) / "input"
+OUTPUT_DIR = Path(TESTS_DIR) / "output"
 TEST_OWL = INPUT_DIR / "go-nucleus.owl"
 
 CHEBI_NUCLEUS = "CHEBI:33252"

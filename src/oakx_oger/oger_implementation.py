@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Iterable, List, Tuple
 
 import nltk
+import pandas as pd
 import pystow
 import yaml
 from nltk import ne_chunk, pos_tag, word_tokenize
@@ -21,6 +22,12 @@ from oaklib.interfaces.obograph_interface import OboGraphInterface
 from oaklib.selector import get_implementation_from_shorthand
 from oaklib.types import CURIE, PRED_CURIE
 from oger.ctrl.run import run as og_run
+
+from oakx_oger.synonymizer.synonymize import (
+    RULES_FILE,
+    create_new_rows_based_on_rules,
+    get_rules_table_from_file,
+)
 
 nltk.download("punkt")  # for GH Actions.
 nltk.download("averaged_perceptron_tagger")  # for GH Actions.
@@ -74,8 +81,8 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         """Initialize the OGERImplementation class."""
         slug = self.resource.slug
         self.oi = get_implementation_from_shorthand(slug)
-        ont = slug.split(":")[-1]
-        self.list_of_ontologies.append(ont)
+        self.ont = slug.split(":")[-1]
+        self.list_of_ontologies.append(self.ont)
         self.stopwords = self.stopwords_dir / "stopwords.txt"
         self.ner_metadata = self.output_dir / "ner_metadata.yaml"
         self.outfile = "None.tsv"
@@ -99,19 +106,52 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                 ).casefold() not in map(
                     lambda tok: tok.casefold(), terms_to_remove
                 ):
+                    label = self.oi.label(node)
+                    if node.startswith("obo:"):
+                        node = node.replace("obo:", "").replace("_", ":")
                     t.write(
                         "\t".join(
                             [
                                 "CUI-less",
                                 slug,
                                 node,
-                                self.oi.label(node),
-                                self.oi.label(node),
+                                label,
+                                label,
                                 BIOLINK_CLASS,
                             ]
                         )
                         + "\n"
                     )
+
+                    synonyms = self.oi.entity_aliases(node)
+                    if len(synonyms) > 0:
+                        for syn in synonyms:
+                            if syn is not None and ":" in syn:
+                                label = self.oi.label(node)
+                                if node.startswith("obo:"):
+                                    node = node.replace("obo:", "").replace(
+                                        "_", ":"
+                                    )
+                                t.write(
+                                    "\t".join(
+                                        [
+                                            "CUI-less",
+                                            slug,
+                                            node,
+                                            label,
+                                            label,
+                                            BIOLINK_CLASS,
+                                        ]
+                                    )
+                                    + "\n"
+                                )
+
+        synonymizer_rules_table = get_rules_table_from_file(RULES_FILE)
+        new_rows_to_be_added: pd.DataFrame = create_new_rows_based_on_rules(
+            synonymizer_rules_table, path
+        )
+        with open(path, "a") as f:
+            new_rows_to_be_added.to_csv(f, index=False, header=False, sep="\t")
 
     def annotate_file(
         self,
@@ -156,8 +196,9 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
 
         if isinstance(text_file, TextIOWrapper):
             text_file = Path(text_file.name)
-            self.outfile = text_file.name
+
             if text_file.suffix == ".tsv":
+                self.outfile = text_file.name
                 OGER_CONFIG["pointers"] = "*" + text_file.suffix
                 OGER_CONFIG["article-format"] = "txt_tsv"
 
@@ -167,7 +208,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
 
         og_run(n_workers=self.workers, **OGER_CONFIG)
         self.post_output = self.output_dir / self.outfile.replace(
-            ".tsv", "_postProcessed.tsv"
+            ".tsv", f"{self.ont}_postProcessed.tsv"
         )
         with open(text_file, "r") as f:
             text_list = f.readlines()
