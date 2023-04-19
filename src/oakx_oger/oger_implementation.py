@@ -123,10 +123,10 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                         + "\n"
                     )
 
-                    synonyms = self.oi.entity_aliases(node)
+                    synonyms = [x.replace("\n", "") for x in self.oi.entity_aliases(node) if x is not None]
                     if len(synonyms) > 0:
                         for syn in synonyms:
-                            if syn is not None and ":" in syn:
+                            if syn is not None:
                                 label = self.oi.label(node)
                                 if node.startswith("obo:"):
                                     node = node.replace("obo:", "").replace(
@@ -138,7 +138,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                                             "CUI-less",
                                             slug,
                                             node,
-                                            label,
+                                            syn,
                                             label,
                                             BIOLINK_CLASS,
                                         ]
