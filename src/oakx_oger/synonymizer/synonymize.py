@@ -62,7 +62,9 @@ def create_new_rows_based_on_rules(
         rule_subset = rules_df.loc[rules_df["ontology"] == ont][
             columns_of_interest_for_rules
         ]
-        terms_df_subset = terms_df.loc[terms_df["id"].str.startswith(ont)]
+        terms_df_subset = terms_df.loc[
+            terms_df["id"].str.startswith(ont, na=False)
+        ]
         for rule_row in rule_subset.iterrows():
             need_syn_df = terms_df_subset[
                 terms_df_subset["match_term"].str.match(

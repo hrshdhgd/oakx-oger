@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Iterable, List, Tuple
 
 import nltk
+import pandas as pd
 import pystow
 import yaml
 from nltk import ne_chunk, pos_tag, word_tokenize
@@ -27,7 +28,6 @@ from oakx_oger.synonymizer.synonymize import (
     create_new_rows_based_on_rules,
     get_rules_table_from_file,
 )
-import pandas as pd
 
 nltk.download("punkt")  # for GH Actions.
 nltk.download("averaged_perceptron_tagger")  # for GH Actions.
@@ -123,7 +123,11 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                         + "\n"
                     )
 
-                    synonyms = [x.replace("\n", "") for x in self.oi.entity_aliases(node) if x is not None]
+                    synonyms = [
+                        x.replace("\n", "")
+                        for x in self.oi.entity_aliases(node)
+                        if x is not None
+                    ]
                     if len(synonyms) > 0:
                         for syn in synonyms:
                             if syn is not None:
