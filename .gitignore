@@ -137,4 +137,3 @@ src/oakx_oger/input/tmp/*.txt
 tests/terms/pato_termlist.tsv
 tests/output/*
 *.tsv
-src/oakx_oger/synonymizer/rules.yaml
