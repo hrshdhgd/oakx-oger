@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "oakx-oger"
-version = "0.1.0"
-description = "\"oakx-oger\""
+version = "0.0.0"
+description = "oakx-oger"
 authors = ["Harshad Hegde <hhegde@lbl.gov>"]
 license = "BSD 3"
 readme = "README.md"
@@ -35,7 +35,12 @@ docs = [
     "sphinx-click",
     "myst-parser",
     ]
-    
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "pep440"
+
 [tool.black]
 line-length = 79
 target-version = ["py38", "py39", "py310"]
@@ -50,3 +55,4 @@ reverse_relative = true
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
 build-backend = "poetry_dynamic_versioning.backend"
+
