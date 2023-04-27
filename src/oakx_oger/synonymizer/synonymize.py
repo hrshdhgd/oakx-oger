@@ -19,7 +19,7 @@ RELEVANT_COLUMNS = [
 
 def get_rules_table_from_file(rules_file: Path = RULES_FILE):
     """Parse rules file to return table."""
-    with open(rules_file, "r") as f:
+    with open(rules_file, "r", encoding='utf-8') as f:
         rules = yaml.safe_load(f)
 
     list_of_rules = rules["rules"]

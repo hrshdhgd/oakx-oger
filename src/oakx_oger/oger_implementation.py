@@ -99,7 +99,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         [0] UMLS CUI, [1] resource from which it comes,
         [2] native ID, [3] term, [4] preferred form, [5] type
         """
-        with open(path, "w") as t:
+        with open(path, "w", encoding='utf-8') as t:
             for node in self.oi.entities():
                 if self.oi.label(node) and self.oi.label(
                     node
@@ -154,7 +154,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         new_rows_to_be_added: pd.DataFrame = create_new_rows_based_on_rules(
             synonymizer_rules_table, path
         )
-        with open(path, "a") as f:
+        with open(path, "a", encoding='utf-8') as f:
             new_rows_to_be_added.to_csv(f, index=False, header=False, sep="\t")
 
     def annotate_file(
@@ -214,7 +214,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         self.post_output = self.output_dir / self.outfile.replace(
             ".tsv", f"{self.ont}_postProcessed.tsv"
         )
-        with open(text_file, "r") as f:
+        with open(text_file, "r", encoding='utf-8') as f:
             text_list = f.readlines()
             tagged_dict: dict = {}
             for i, text in enumerate(text_list):
@@ -242,11 +242,11 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                                 "entity": named_entity.label(),
                             }
 
-            with open(self.ner_metadata, "w") as f:
+            with open(self.ner_metadata, "w", encoding='utf-8') as f:
                 yaml.safe_dump(tagged_dict, f)
 
-        with open(self.output_dir / self.outfile, "r") as f, open(
-            self.post_output, "w", newline=""
+        with open(self.output_dir / self.outfile, "r", encoding='utf-8') as f, open(
+            self.post_output, "w", newline="", encoding='utf-8'
         ) as o:
             input_reader = csv.DictReader(f, delimiter="\t")
             for row in input_reader:
