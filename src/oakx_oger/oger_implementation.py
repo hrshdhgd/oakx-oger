@@ -191,7 +191,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                 )
             OGER_CONFIG[termlist_path_variable] = str(termlist_filepath)
 
-        with open(self.stopwords, "r") as st:
+        with open(self.stopwords, "r", encoding="utf-8") as st:
             stopwords = set(st.read().splitlines())
         if hasattr(configuration, "token_exclusion_list"):
             configuration.token_exclusion_list.extend(list(stopwords))
