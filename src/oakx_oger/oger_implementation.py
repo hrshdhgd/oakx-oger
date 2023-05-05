@@ -156,7 +156,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         )
         with open(path, "a", encoding="utf-8") as f:
             new_rows_to_be_added.to_csv(
-                f, index=False, header=False, sep="\t", line_terminator="\n"
+                f, index=False, header=False, sep="\t", lineterminator="\n"
             )
 
     def annotate_file(
