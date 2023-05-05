@@ -84,7 +84,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         self.ont = slug.split(":")[-1]
         self.list_of_ontologies.append(self.ont)
         self.stopwords = self.stopwords_dir / "stopwords.txt"
-        self.ner_metadata = self.output_dir / "ner_metadata.yaml"
+        self.ner_metadata = self.output_dir / f"{self.ont}_ner_metadata.yaml"
         self.outfile = "None.tsv"
         self.workers = cpu_count() // 2 - 1
 
