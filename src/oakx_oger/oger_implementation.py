@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Iterable, List, Tuple
 
 import nltk
+import pandas as pd
 import pystow
 import yaml
 from nltk import ne_chunk, pos_tag, word_tokenize
@@ -18,9 +19,15 @@ from oaklib.datamodels.text_annotator import (
 from oaklib.interfaces import TextAnnotatorInterface
 from oaklib.interfaces.basic_ontology_interface import ALIAS_MAP
 from oaklib.interfaces.obograph_interface import OboGraphInterface
-from oaklib.selector import get_implementation_from_shorthand
+from oaklib.selector import get_adapter
 from oaklib.types import CURIE, PRED_CURIE
 from oger.ctrl.run import run as og_run
+
+from oakx_oger.synonymizer.synonymize import (
+    RULES_FILE,
+    create_new_rows_based_on_rules,
+    get_rules_table_from_file,
+)
 
 nltk.download("punkt")  # for GH Actions.
 nltk.download("averaged_perceptron_tagger")  # for GH Actions.
@@ -73,11 +80,11 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
     def __post_init__(self):
         """Initialize the OGERImplementation class."""
         slug = self.resource.slug
-        self.oi = get_implementation_from_shorthand(slug)
-        ont = slug.split(":")[-1]
-        self.list_of_ontologies.append(ont)
+        self.oi = get_adapter(slug)
+        self.ont = slug.split(":")[-1]
+        self.list_of_ontologies.append(self.ont)
         self.stopwords = self.stopwords_dir / "stopwords.txt"
-        self.ner_metadata = self.output_dir / "ner_metadata.yaml"
+        self.ner_metadata = self.output_dir / f"{self.ont}_ner_metadata.yaml"
         self.outfile = "None.tsv"
         self.workers = cpu_count() // 2 - 1
 
@@ -92,26 +99,65 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
         [0] UMLS CUI, [1] resource from which it comes,
         [2] native ID, [3] term, [4] preferred form, [5] type
         """
-        with open(path, "w") as t:
+        with open(path, "w", encoding="utf-8") as t:
             for node in self.oi.entities():
                 if self.oi.label(node) and self.oi.label(
                     node
                 ).casefold() not in map(
                     lambda tok: tok.casefold(), terms_to_remove
                 ):
+                    label = self.oi.label(node)
+                    if node.startswith("obo:"):
+                        node = node.replace("obo:", "").replace("_", ":")
                     t.write(
                         "\t".join(
                             [
                                 "CUI-less",
                                 slug,
                                 node,
-                                self.oi.label(node),
-                                self.oi.label(node),
+                                label,
+                                label,
                                 BIOLINK_CLASS,
                             ]
                         )
                         + "\n"
                     )
+
+                    synonyms = [
+                        x.replace("\n", "")
+                        for x in self.oi.entity_aliases(node)
+                        if x is not None
+                    ]
+                    if len(synonyms) > 0:
+                        for syn in synonyms:
+                            if syn is not None:
+                                label = self.oi.label(node)
+                                if node.startswith("obo:"):
+                                    node = node.replace("obo:", "").replace(
+                                        "_", ":"
+                                    )
+                                t.write(
+                                    "\t".join(
+                                        [
+                                            "CUI-less",
+                                            slug,
+                                            node,
+                                            syn,
+                                            label,
+                                            BIOLINK_CLASS,
+                                        ]
+                                    )
+                                    + "\n"
+                                )
+
+        synonymizer_rules_table = get_rules_table_from_file(RULES_FILE)
+        new_rows_to_be_added: pd.DataFrame = create_new_rows_based_on_rules(
+            synonymizer_rules_table, path
+        )
+        with open(path, "a", encoding="utf-8") as f:
+            new_rows_to_be_added.to_csv(
+                f, index=False, header=False, sep="\t", lineterminator="\n"
+            )
 
     def annotate_file(
         self,
@@ -147,7 +193,7 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                 )
             OGER_CONFIG[termlist_path_variable] = str(termlist_filepath)
 
-        with open(self.stopwords, "r") as st:
+        with open(self.stopwords, "r", encoding="utf-8") as st:
             stopwords = set(st.read().splitlines())
         if hasattr(configuration, "token_exclusion_list"):
             configuration.token_exclusion_list.extend(list(stopwords))
@@ -156,8 +202,9 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
 
         if isinstance(text_file, TextIOWrapper):
             text_file = Path(text_file.name)
-            self.outfile = text_file.name
+
             if text_file.suffix == ".tsv":
+                self.outfile = text_file.name
                 OGER_CONFIG["pointers"] = "*" + text_file.suffix
                 OGER_CONFIG["article-format"] = "txt_tsv"
 
@@ -167,9 +214,9 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
 
         og_run(n_workers=self.workers, **OGER_CONFIG)
         self.post_output = self.output_dir / self.outfile.replace(
-            ".tsv", "_postProcessed.tsv"
+            ".tsv", f"{self.ont}_postProcessed.tsv"
         )
-        with open(text_file, "r") as f:
+        with open(text_file, "r", encoding="utf-8") as f:
             text_list = f.readlines()
             tagged_dict: dict = {}
             for i, text in enumerate(text_list):
@@ -197,12 +244,12 @@ class OGERImplementation(TextAnnotatorInterface, OboGraphInterface):
                                 "entity": named_entity.label(),
                             }
 
-            with open(self.ner_metadata, "w") as f:
+            with open(self.ner_metadata, "w", encoding="utf-8") as f:
                 yaml.safe_dump(tagged_dict, f)
 
-        with open(self.output_dir / self.outfile, "r") as f, open(
-            self.post_output, "w", newline=""
-        ) as o:
+        with open(
+            self.output_dir / self.outfile, "r", encoding="utf-8"
+        ) as f, open(self.post_output, "w", newline="", encoding="utf-8") as o:
             input_reader = csv.DictReader(f, delimiter="\t")
             for row in input_reader:
                 if "fieldnames" not in locals():
