@@ -1,0 +1,101 @@
+rules:
+  - synonymizer:
+      the_rule: Adding X as synonym for X-activity in GO
+      match: "(.*)(activity)"
+      match_scope: "*"
+      replacement: "\\1"
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
+  - synonymizer:
+      the_rule: Remove parentheses bound info from the label.
+      match: "\\([^)]*\\)"
+      match_scope: "*"
+      replacement: ""
